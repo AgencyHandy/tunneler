@@ -45,8 +45,6 @@ export async function validateAwsEnvironment() {
 const route53 = new Route53Client({});
 
 export async function createCNAME(hostname: string, tunnelUUID: string) {
-  await checkAwsIdentity();
-
   const fqdn = hostname.endsWith(".") ? hostname : `${hostname}.`;
   const target = `${tunnelUUID}.cfargotunnel.com.`;
 
@@ -156,8 +154,6 @@ export async function listCNAMEs() {
 }
 
 export async function createOrUpdateEphemeralCNAME(hostname: string, ephemeralTarget: string) {
-  await checkAwsIdentity();
-
   const fqdn = hostname.endsWith(".") ? hostname : `${hostname}.`;
 
   const listCommand = new ListResourceRecordSetsCommand({
