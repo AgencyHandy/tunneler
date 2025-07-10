@@ -8,6 +8,7 @@ import { createCommand } from "../src/commands/create";
 import { listCommand } from "../src/commands/list";
 import { loginCommand } from "../src/commands/login";
 import { removeCommand } from "../src/commands/remove";
+import { runCommand } from "../src/commands/run";
 import { statusCommand } from "../src/commands/status";
 
 const program = new Command();
@@ -20,6 +21,7 @@ program
 program.addCommand(loginCommand);
 program.addCommand(createCommand)
 program.addCommand(addCommand);
+program.addCommand(runCommand)
 program.addCommand(removeCommand);
 program.addCommand(listCommand);
 program.addCommand(statusCommand);
