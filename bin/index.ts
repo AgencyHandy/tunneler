@@ -3,10 +3,11 @@ import * as dotenv from "dotenv";
 dotenv.config({ quiet: true });
 
 import { Command } from "commander";
-import { loginCommand } from "../src/commands/login";
 import { addCommand } from "../src/commands/add";
-import { removeCommand } from "../src/commands/remove";
+import { createCommand } from "../src/commands/create";
 import { listCommand } from "../src/commands/list";
+import { loginCommand } from "../src/commands/login";
+import { removeCommand } from "../src/commands/remove";
 import { statusCommand } from "../src/commands/status";
 
 const program = new Command();
@@ -17,6 +18,7 @@ program
   .version("0.1.0");
 
 program.addCommand(loginCommand);
+program.addCommand(createCommand)
 program.addCommand(addCommand);
 program.addCommand(removeCommand);
 program.addCommand(listCommand);
