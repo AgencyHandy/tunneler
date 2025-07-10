@@ -10,11 +10,6 @@ import chalk from "chalk";
 
 const HOSTED_ZONE_ID = process.env.ROUTE53_ZONE_ID;
 
-if (!HOSTED_ZONE_ID) {
-  console.error(chalk.red("ERROR: Please set ROUTE53_ZONE_ID in your environment."));
-  process.exit(1);
-}
-
 async function checkAwsIdentity() {
   const sts = new STSClient({});
   const identity = await sts.send(new GetCallerIdentityCommand({}));
