@@ -11,6 +11,7 @@ import { loginCommand } from "../src/commands/login";
 import { removeCommand } from "../src/commands/remove";
 import { runCommand } from "../src/commands/run";
 import { statusCommand } from "../src/commands/status";
+import { logoutCommand } from "../src/commands/logout";
 
 const program = new Command();
 
@@ -20,10 +21,11 @@ program
   .version("0.1.0");
 
 program.addCommand(loginCommand);
-program.addCommand(createCommand)
+program.addCommand(logoutCommand);
+program.addCommand(createCommand);
 program.addCommand(addCommand);
-program.addCommand(ephemeralCommand)
-program.addCommand(runCommand)
+program.addCommand(ephemeralCommand);
+program.addCommand(runCommand);
 program.addCommand(removeCommand);
 program.addCommand(listCommand);
 program.addCommand(statusCommand);
