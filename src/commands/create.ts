@@ -15,30 +15,31 @@ export const createCommand = new Command("create")
     const tunnelName = opts.name;
     console.log(chalk.cyan(`Creating tunnel "${tunnelName}"...`));
 
-    // Create the tunnel
+    // Run cloudflared
     const result = spawnSync("cloudflared", ["tunnel", "create", tunnelName], {
       stdio: "pipe",
       encoding: "utf-8"
     });
 
     if (result.status !== 0) {
-      console.error(chalk.red(result.stderr));
+      console.error(chalk.red(result.stderr || "cloudflared failed"));
       process.exit(result.status || 1);
     }
 
     console.log(chalk.green(`✅ Tunnel "${tunnelName}" created.`));
 
-    // Extract UUID from stdout
-    const uuidMatch = result.stdout.match(/Created tunnel with id ([a-f0-9-]+)/);
-    if (!uuidMatch) {
-      console.error(chalk.red("Failed to extract tunnel UUID."));
+    // Extract UUID from credentials file path
+    const credMatch = result.stdout.match(/\/([a-f0-9-]{36})\.json/);
+    if (!credMatch) {
+      console.error(chalk.red("❌ Failed to extract tunnel UUID from output."));
+      console.error("Output was:\n" + result.stdout);
       process.exit(1);
     }
 
-    const uuid = uuidMatch[1];
+    const uuid = credMatch[1];
     console.log(chalk.yellow(`Tunnel UUID: ${uuid}`));
 
-    // Update config
+    // Update config metadata
     const configDir = path.join(os.homedir(), ".tunneler");
     if (!fs.existsSync(configDir)) {
       fs.mkdirSync(configDir, { recursive: true });
