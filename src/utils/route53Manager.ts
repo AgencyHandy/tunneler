@@ -154,3 +154,58 @@ export async function listCNAMEs() {
     process.exit(1);
   }
 }
+
+export async function createOrUpdateEphemeralCNAME(hostname: string, ephemeralTarget: string) {
+  await checkAwsIdentity();
+
+  const fqdn = hostname.endsWith(".") ? hostname : `${hostname}.`;
+
+  const listCommand = new ListResourceRecordSetsCommand({
+    HostedZoneId: HOSTED_ZONE_ID
+  });
+
+  const listResponse = await route53.send(listCommand);
+
+  const existing = (listResponse.ResourceRecordSets || []).find(
+    (r) => r.Type === "CNAME" && r.Name === fqdn
+  );
+
+  const action: ChangeAction = existing ? "UPSERT" : "CREATE";
+
+  const params = {
+    HostedZoneId: HOSTED_ZONE_ID,
+    ChangeBatch: {
+      Comment: "Created by Tunneler Ephemeral CLI",
+      Changes: [
+        {
+          Action: action,
+          ResourceRecordSet: {
+            Name: fqdn,
+            Type: "CNAME" as RRType,
+            TTL: 300,
+            ResourceRecords: [
+              {
+                Value: ephemeralTarget
+              }
+            ]
+          }
+        }
+      ]
+    }
+  };
+
+  try {
+    const changeCommand = new ChangeResourceRecordSetsCommand(params);
+    await route53.send(changeCommand);
+
+    console.log(
+      chalk.green(`✅ Route53 CNAME ${action === "CREATE" ? "created" : "updated"}:`)
+    );
+    console.log(chalk.cyan(`${fqdn} -> ${ephemeralTarget}`));
+  } catch (err: any) {
+    console.error(chalk.red("Error creating/updating CNAME in Route53:"));
+    console.error(err.message || err);
+    process.exit(1);
+  }
+}
+
