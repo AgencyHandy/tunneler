@@ -1,0 +1,28 @@
+{
+  "name": "@agencyhandy/tunneler",
+  "version": "0.1.0",
+  "description": "CLI tool to manage Cloudflare tunnels and Route53 records",
+  "bin": {
+    "tunneler": "./bin/index.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "start": "ts-node bin/index.ts"
+  },
+  "dependencies": {
+    "@aws-sdk/client-route-53": "^3.844.0",
+    "@aws-sdk/client-sts": "^3.844.0",
+    "axios": "^1.10.0",
+    "chalk": "^5.x",
+    "commander": "^14.0.0",
+    "dotenv": "^17.2.0",
+    "inquirer": "^9.x",
+    "ps-list": "^8.1.1",
+    "yaml": "^2.x"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.12",
+    "ts-node": "^10.x",
+    "typescript": "^5.x"
+  }
+}

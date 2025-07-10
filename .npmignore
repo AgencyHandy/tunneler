@@ -1,0 +1,12 @@
+src/
+bin/
+node_modules/
+*.ts
+tsconfig.json
+.env
+.env.*
+.DS_Store
+.vscode/
+*.log
+*.sh
+*.md~  # temporary files
