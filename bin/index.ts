@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 import * as dotenv from "dotenv";
-dotenv.config();
+dotenv.config({ quiet: true });
 
 import { Command } from "commander";
 import { loginCommand } from "../src/commands/login";

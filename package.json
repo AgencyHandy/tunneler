@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "description": "CLI tool to manage Cloudflare tunnels and Route53 records",
   "bin": {
-    "tunneler": "./bin/index.js"
+    "tunneler": "./dist/bin/index.js"
   },
   "scripts": {
     "build": "tsc",
