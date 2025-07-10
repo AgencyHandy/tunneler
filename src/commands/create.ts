@@ -4,6 +4,7 @@ import { Command } from "commander";
 import fs from "fs";
 import os from "os";
 import path from "path";
+import YAML from "yaml";
 import { validateCloudflared } from "../utils/cloudflaredValidator";
 
 export const createCommand = new Command("create")
@@ -71,4 +72,16 @@ export const createCommand = new Command("create")
     console.log(chalk.green("✅ Tunnel metadata saved."));
     console.log(chalk.yellow(`Credentials path: ${credentialsPath}`));
     console.log(chalk.yellow(`Config YAML path: ${tunnelConfigPath}`));
+
+    // ✅ Write initial YAML config using YAML lib
+    const yamlContent = YAML.stringify({
+      tunnel: uuid,
+      "credentials-file": credentialsPath,
+      ingress: [
+        { service: "http_status:404" }
+      ]
+    });
+
+    fs.writeFileSync(tunnelConfigPath, yamlContent, "utf-8");
+    console.log(chalk.green(`✅ YAML config created at ${tunnelConfigPath}`));
   });
