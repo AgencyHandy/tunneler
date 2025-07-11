@@ -10,5 +10,6 @@
     "forceConsistentCasingInFileNames": true,
     "skipLibCheck": true
   },
-  "include": ["src", "bin"]
+  "include": ["src", "bin"],
+  "exclude": ["node_modules", "dist"]
 }

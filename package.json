@@ -22,5 +22,18 @@
     "@types/node": "^24.0.12",
     "ts-node": "^10.x",
     "typescript": "^5.x"
-  }
+  },
+    "repository": {
+    "type": "git",
+    "url": "https://github.com/agencyhandy/tunneler.git"
+  },
+  "keywords": [
+    "cloudflare",
+    "cli",
+    "tunnel",
+    "dns",
+    "devops"
+  ],
+  "author": "S M Mahmudul Hasan <hasan@agencyhandy.com>",
+  "license": "MIT"
 }
