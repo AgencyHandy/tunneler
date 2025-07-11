@@ -1,6 +1,6 @@
 # @agencyhandy/tunneler
 
-A CLI tool to manage Cloudflare tunnels and Route53 DNS records.
+A CLI tool to manage Cloudflare Tunnels and DNS records without needing to leave your terminal.
 
 ## Installation
 ```bash
@@ -8,102 +8,81 @@ npm install -g @agencyhandy/tunneler
 ```
 ## Environment Variables
 
-The CLI requires several AWS environment variables to function:
+Before using the CLI, create a **Cloudflare API token** and note your **Zone ID**.
 
-| Variable                | Description                             | Example              |
-| ----------------------- | --------------------------------------- | -------------------- |
-| `AWS_ACCESS_KEY_ID`     | Your AWS access key                     | `AKIA...`            |
-| `AWS_SECRET_ACCESS_KEY` | Your AWS secret key                     | `abcd...`            |
-| `AWS_REGION`            | AWS region to use                       | `us-east-1`          |
-| `ROUTE53_ZONE_ID`       | The Route53 Hosted Zone ID for your DNS | `Z1234567890ABCDEFG` |
+### Required Environment Variables
 
+| Variable               | Description                                             |
+| ---------------------- | ------------------------------------------------------- |
+| `CLOUDFLARE_API_TOKEN` | API Token with permissions (Zone\:DNS Edit, Zone\:Edit) |
+| `CLOUDFLARE_ZONE_ID`   | Zone ID for the domain you will create records in       |
 
-**All these variables are **required**.**  
-If any are missing, the CLI will exit with an error.
+Specify these environment variables depending on your machine. `export` is used most Linux / Unix machines. For Windows, please follow appropriate settings or powershell command.
 
-* * *
+####  Cloudflare API Token Permissions
 
-## `.env` File Support
+Your **API Token** must have:
 
-You can create a `.env` file in your working directory to avoid exporting environment variables manually:
+-   **Zone:DNS → Edit, Read**
+    
+-   **Zone → Edit, Read**
+    
 
-```ini
-AWS_ACCESS_KEY_ID=AKIA...
-AWS_SECRET_ACCESS_KEY=abcd...
-AWS_REGION=us-east-1
-ROUTE53_ZONE_ID=Z1234567890ABCDEFG
+This allows creating/updating/removing DNS records in your zone.
+
+#### `.env` Support
+.env file should be where you are running the tunneler command from. 
+```bash
+CLOUDFLARE_API_TOKEN=cf_test_ABC123xyz
+CLOUDFLARE_ZONE_ID=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 ```
+> 💡 **Tip**: `tunneler login` will prompt you to authenticate via your browser, but you still need a Zone in Cloudflare beforehand.
 
-The CLI loads this automatically.
+## Usage Guide
 
-* * *
+### Login to Cloudflare
 
-## Environment Validation
-
-Before any AWS operation, `tunneler` performs these checks:
-
--   Confirms all required environment variables are present.
-    
--   Verifies AWS credentials by calling `sts:GetCallerIdentity`.
-    
--   Prints the authenticated IAM ARN.
-    
-
-This ensures you never encounter partial or invalid configurations during execution.
-
-## Commands
-
-### 1\. Login to Cloudflare
-
+Authenticate your `cloudflared` client,
 ```bash
 tunneler login
 ```
+This opens a browser window to complete authentication where you must select your zone to complete setup.
 
-### 2\. Create a new tunnel
+### Create a Tunnel
+Creates a named tunnel and saves configuration,
 
 ```bash
 tunneler create --name my-tunnel
 ```
 
-### 3\. Add ingress rule
+### Add an Ingress Rule
+Defines which local service to expose via your chosen hostname,
 
 ```bash
-tunneler add --tunnel my-tunnel --hostname app.example.com --service 192.168.1.100:8080
+tunneler add --tunnel my-tunnel --hostname app.yourdomain.com --service localhost:3000
 ```
+> This also automatically creates or updates the CNAME in Cloudflare pointing to the tunnel endpoint.
 
-### 4\. Remove ingress rule
+### Start the Tunnel
+Runs the tunnel in the foreground,
 
 ```bash
-tunneler remove --tunnel my-tunnel --hostname app.example.com
+tunneler run --tunnel my-tunnel
+```
+Leave this running to keep the tunnel active.
+
+### Remove an Ingress Rule
+Removes both the ingress rule and the CNAME record in Cloudflare,
+
+```bash
+tunneler remove --tunnel my-tunnel --hostname app.yourdomain.com
 ```
 
-### 5\. List ingress rules
+### List Ingress Rules
+Show all ingress rules for the tunnel,
 
 ```bash
 tunneler list --tunnel my-tunnel
 ```
 
-### 6\. Restart tunnel
-
-```ts
-restartCloudflared("my-tunnel");
-```
-
-### 7\. Stop tunnel
-
-```ts
-stopCloudflared("my-tunnel");
-```
-
-### 8\. Check health
-
-```bash
-tunneler health --tunnel my-tunnel
-```
-
-## Environment Variables
--   `ROUTE53_ZONE_ID`: Your Route53 Hosted Zone ID.    
--   `AWS_ACCESS_KEY_ID` / `AWS_SECRET_ACCESS_KEY`: AWS credentials.
-
-## License
-MIT
+### TODO: Status, health and others
