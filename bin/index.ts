@@ -16,7 +16,7 @@ const program = new Command();
 
 program
   .name("tunneler")
-  .description("Manage Cloudflare tunnels and Route53 records")
+  .description("Manage Cloudflare tunnels and related DNS operations")
   .version("0.1.0");
 
 program.addCommand(loginCommand);

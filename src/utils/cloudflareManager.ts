@@ -94,3 +94,51 @@ export async function createOrUpdateCNAME(hostname: string, target: string) {
     process.exit(1);
   }
 }
+
+export async function deleteCNAME(hostname: string) {
+  const zoneId = process.env.CLOUDFLARE_ZONE_ID;
+  const apiToken = process.env.CLOUDFLARE_API_TOKEN;
+
+  if (!zoneId || !apiToken) {
+    console.error(chalk.red("❌ Missing CLOUDFLARE_ZONE_ID or CLOUDFLARE_API_TOKEN in environment."));
+    process.exit(1);
+  }
+
+  console.log(chalk.blue(`🔍 Looking up DNS record for ${hostname}...`));
+
+  // List records to find the ID
+  const listResp = await axios.get(
+    `${CF_API_BASE}/zones/${zoneId}/dns_records`,
+    {
+      headers: {
+        Authorization: `Bearer ${apiToken}`,
+        "Content-Type": "application/json"
+      },
+      params: {
+        type: "CNAME",
+        name: hostname
+      }
+    }
+  );
+
+  const record = listResp.data.result[0];
+  if (!record) {
+    console.log(chalk.yellow(`⚠️ No CNAME record found for ${hostname}. Nothing to delete.`));
+    return;
+  }
+
+  const recordId = record.id;
+
+  // Delete it
+  await axios.delete(
+    `${CF_API_BASE}/zones/${zoneId}/dns_records/${recordId}`,
+    {
+      headers: {
+        Authorization: `Bearer ${apiToken}`,
+        "Content-Type": "application/json"
+      }
+    }
+  );
+
+  console.log(chalk.green(`✅ CNAME record deleted: ${hostname}`));
+}
