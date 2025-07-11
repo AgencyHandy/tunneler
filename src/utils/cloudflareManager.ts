@@ -30,6 +30,32 @@ export function validateCloudflareEnvironment() {
   }
 }
 
+export async function checkIfCNAMEExists(hostname: string) {
+  const zoneId = process.env.CLOUDFLARE_ZONE_ID;
+  const apiToken = process.env.CLOUDFLARE_API_TOKEN;
+
+  if (!zoneId || !apiToken) {
+    console.error(chalk.red("❌ Missing CLOUDFLARE_ZONE_ID or CLOUDFLARE_API_TOKEN in environment."));
+    process.exit(1);
+  }
+
+  const resp = await axios.get(
+    `${CF_API_BASE}/zones/${zoneId}/dns_records`,
+    {
+      headers: {
+        Authorization: `Bearer ${apiToken}`,
+        "Content-Type": "application/json"
+      },
+      params: {
+        type: "CNAME",
+        name: hostname
+      }
+    }
+  );
+
+  return resp.data.result.length > 0;
+}
+
 export async function createOrUpdateCNAME(hostname: string, target: string) {
   const recordName = hostname;
   const recordContent = target.endsWith(".") ? target.slice(0, -1) : target;

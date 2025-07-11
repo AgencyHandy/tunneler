@@ -6,18 +6,23 @@ import path from "path";
 import yaml from "yaml";
 import { restartCloudflared } from "../utils/cloudflaredManager";
 import { validateCloudflared } from "../utils/cloudflaredValidator";
-import { createOrUpdateCNAME, validateCloudflareEnvironment } from "../utils/cloudflareManager";
+import {
+  checkIfCNAMEExists,
+  createOrUpdateCNAME,
+  validateCloudflareEnvironment
+} from "../utils/cloudflareManager";
 
 export const addCommand = new Command("add")
   .description("Add an ingress rule to a tunnel")
   .requiredOption("--tunnel <name>", "Tunnel name")
   .requiredOption("--hostname <hostname>", "Hostname")
   .requiredOption("--service <service>", "Target service (ip:port)")
+  .option("--overwrite", "Overwrite existing CNAME if it exists")
   .action(async (opts) => {
     validateCloudflared();
     validateCloudflareEnvironment();
 
-    const { tunnel, hostname, service } = opts;
+    const { tunnel, hostname, service, overwrite } = opts;
 
     const configDir = path.join(os.homedir(), ".tunneler");
     const configPath = path.join(configDir, "config.json");
@@ -35,6 +40,14 @@ export const addCommand = new Command("add")
       process.exit(1);
     }
 
+    // ✅ Check if CNAME exists before proceeding
+    console.log(chalk.blue(`🔍 Checking if CNAME "${hostname}" already exists...`));
+    const exists = await checkIfCNAMEExists(hostname);
+    if (exists && !overwrite) {
+      console.error(chalk.red(`❌ A CNAME for "${hostname}" already exists. Use --overwrite to replace it.`));
+      process.exit(1);
+    }
+
     const yamlPath = tunnelInfo.configPath;
 
     // Load existing YAML
@@ -45,7 +58,7 @@ export const addCommand = new Command("add")
       console.log(chalk.yellow("Creating new config YAML..."));
     }
 
-    // Add the new ingress rule
+    // Remove any old rule for this hostname
     yamlDoc.ingress = yamlDoc.ingress.filter((rule: any) => rule.hostname !== hostname);
     yamlDoc.ingress.unshift({
       hostname,
@@ -59,9 +72,9 @@ export const addCommand = new Command("add")
 
     // Write YAML
     fs.writeFileSync(yamlPath, yaml.stringify(yamlDoc));
-
     console.log(chalk.green(`✅ Ingress rule added.`));
 
+    // Create or update CNAME in Cloudflare
     await createOrUpdateCNAME(
       hostname,
       `${tunnelInfo.uuid}.cfargotunnel.com`
