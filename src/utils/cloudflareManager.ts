@@ -15,6 +15,21 @@ const api = axios.create({
   timeout: 10_000
 });
 
+export function validateCloudflareEnvironment() {
+  const missingVars: string[] = [];
+
+  if (!process.env.CLOUDFLARE_API_TOKEN) missingVars.push("CLOUDFLARE_API_TOKEN");
+  if (!process.env.CLOUDFLARE_ZONE_ID) missingVars.push("CLOUDFLARE_ZONE_ID");
+
+  if (missingVars.length > 0) {
+    console.error(chalk.red("❌ Missing required environment variables:"));
+    for (const v of missingVars) {
+      console.error(` - ${v}`);
+    }
+    process.exit(1);
+  }
+}
+
 export async function createOrUpdateCNAME(hostname: string, target: string) {
   const recordName = hostname;
   const recordContent = target.endsWith(".") ? target.slice(0, -1) : target;
