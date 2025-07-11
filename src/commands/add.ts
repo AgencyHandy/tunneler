@@ -6,7 +6,7 @@ import path from "path";
 import yaml from "yaml";
 import { restartCloudflared } from "../utils/cloudflaredManager";
 import { validateCloudflared } from "../utils/cloudflaredValidator";
-import { createCNAME, validateAwsEnvironment } from "../utils/route53Manager";
+import { createOrUpdateCNAME } from "../utils/cloudflareManager";
 
 export const addCommand = new Command("add")
   .description("Add an ingress rule to a tunnel")
@@ -15,8 +15,6 @@ export const addCommand = new Command("add")
   .requiredOption("--service <service>", "Target service (ip:port)")
   .action(async (opts) => {
     validateCloudflared();
-    
-    await validateAwsEnvironment();
 
     const { tunnel, hostname, service } = opts;
 
@@ -63,8 +61,10 @@ export const addCommand = new Command("add")
 
     console.log(chalk.green(`✅ Ingress rule added.`));
 
-    // Update Route53
-    await createCNAME(hostname, tunnelInfo.uuid);
+    await createOrUpdateCNAME(
+      hostname,
+      `${tunnelInfo.uuid}.cfargotunnel.com`
+    );
 
     // Restart cloudflared
     await restartCloudflared(tunnel);

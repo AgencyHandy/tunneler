@@ -6,7 +6,6 @@ import path from "path";
 import yaml from "yaml";
 import { restartCloudflared } from "../utils/cloudflaredManager";
 import { validateCloudflared } from "../utils/cloudflaredValidator";
-import { removeCNAME, validateAwsEnvironment } from "../utils/route53Manager";
 
 export const removeCommand = new Command("remove")
   .description("Remove an ingress rule and Route53 record from a tunnel")
@@ -14,8 +13,6 @@ export const removeCommand = new Command("remove")
   .requiredOption("--hostname <hostname>", "Hostname to remove")
   .action(async (opts) => {
     validateCloudflared();
-
-    await validateAwsEnvironment();
     
     const { tunnel, hostname } = opts;
 
@@ -56,9 +53,6 @@ export const removeCommand = new Command("remove")
       fs.writeFileSync(yamlPath, yaml.stringify(yamlDoc));
       console.log(chalk.green(`✅ Removed ingress rule for ${hostname}.`));
     }
-
-    // Remove CNAME
-    await removeCNAME(hostname, tunnelInfo.uuid);
 
     // Restart cloudflared
     await restartCloudflared(tunnel);
