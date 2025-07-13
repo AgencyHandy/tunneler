@@ -1,3 +1,6 @@
+# v0.2.2
+- Add `eslint.config.js` in `.npmignore`
+
 # v0.2.1
 - Remove duplicated instructions of Cloudflare API token
 - Updated informatin about the project

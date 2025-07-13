@@ -10,3 +10,4 @@ tsconfig.json
 *.log
 *.sh
 *.md~  # temporary files
+eslint.config.js
