@@ -11,4 +11,3 @@ tsconfig.json
 *.sh
 *.md~  # temporary files
 eslint.config.js
-dist/package.json

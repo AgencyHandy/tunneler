@@ -1,3 +1,6 @@
+# v0.2.4
+- Add `dist/package.json` to package
+
 # v0.2.3
 - Remove `dist/package.json` from package
 
