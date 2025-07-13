@@ -4,15 +4,15 @@ import fs from "fs";
 import os from "os";
 import path from "path";
 import yaml from "yaml";
-import { restartCloudflared } from "../utils/cloudflaredManager";
-import { validateCloudflared } from "../utils/cloudflaredValidator";
+import { restartCloudflared } from "../../utils/cloudflaredManager";
+import { validateCloudflared } from "../../utils/cloudflaredValidator";
 import {
   checkIfCNAMEExists,
   createOrUpdateCNAME,
   validateCloudflareEnvironment
-} from "../utils/cloudflareManager";
+} from "../../utils/cloudflareManager";
 
-export const addCommand = new Command("add")
+export const addRoute = new Command("add")
   .description("Add an ingress rule to a tunnel")
   .requiredOption("--tunnel <name>", "Tunnel name")
   .requiredOption("--hostname <hostname>", "Hostname")

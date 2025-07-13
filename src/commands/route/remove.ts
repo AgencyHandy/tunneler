@@ -4,11 +4,11 @@ import fs from "fs";
 import os from "os";
 import path from "path";
 import yaml from "yaml";
-import { restartCloudflared } from "../utils/cloudflaredManager";
-import { validateCloudflared } from "../utils/cloudflaredValidator";
-import { deleteCNAME, validateCloudflareEnvironment } from "../utils/cloudflareManager";
+import { restartCloudflared } from "../../utils/cloudflaredManager";
+import { validateCloudflared } from "../../utils/cloudflaredValidator";
+import { deleteCNAME, validateCloudflareEnvironment } from "../../utils/cloudflareManager";
 
-export const removeCommand = new Command("remove")
+export const removeRoute = new Command("remove")
   .description("Remove an ingress rule and Cloudflare DNS record from a tunnel")
   .requiredOption("--tunnel <name>", "Tunnel name")
   .requiredOption("--hostname <hostname>", "Hostname to remove")

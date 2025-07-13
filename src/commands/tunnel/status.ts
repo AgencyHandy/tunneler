@@ -1,9 +1,9 @@
 import chalk from "chalk";
 import { exec } from "child_process";
 import { Command } from "commander";
-import { validateCloudflared } from "../utils/cloudflaredValidator";
+import { validateCloudflared } from "../../utils/cloudflaredValidator";
 
-export const statusCommand = new Command("status")
+export const statusTunnel = new Command("status")
   .description("Check status of the cloudflared tunnel service")
   .requiredOption("--tunnel <name>", "Tunnel name")
   .action(async (opts) => {

@@ -5,7 +5,7 @@ import fs from "fs";
 import os from "os";
 import path from "path";
 
-export const runCommand = new Command("run")
+export const runTunnel = new Command("run")
   .description("Run cloudflared tunnel in foreground")
   .requiredOption("--tunnel <name>", "Tunnel name")
   .action((opts) => {

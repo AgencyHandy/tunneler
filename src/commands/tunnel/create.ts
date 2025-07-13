@@ -5,9 +5,9 @@ import fs from "fs";
 import os from "os";
 import path from "path";
 import YAML from "yaml";
-import { validateCloudflared } from "../utils/cloudflaredValidator";
+import { validateCloudflared } from "../../utils/cloudflaredValidator";
 
-export const createCommand = new Command("create")
+export const createTunnel = new Command("create")
   .description("Create a new Cloudflare tunnel")
   .requiredOption("--name <name>", "Name of the tunnel")
   .action(async (opts) => {

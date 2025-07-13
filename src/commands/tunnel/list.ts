@@ -4,9 +4,9 @@ import fs from "fs";
 import os from "os";
 import path from "path";
 import yaml from "yaml";
-import { validateCloudflared } from "../utils/cloudflaredValidator";
+import { validateCloudflared } from "../../utils/cloudflaredValidator";
 
-export const listCommand = new Command("list")
+export const listTunnel = new Command("list")
   .description("List ingress rules for a tunnel")
   .requiredOption("--tunnel <name>", "Tunnel name")
   .action((opts) => {
