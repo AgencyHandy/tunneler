@@ -9,6 +9,7 @@ npm install -g @agencyhandy/tunneler
 ```
 
 ## Requirements
+
 - [cloudflared](https://developers.cloudflare.com/cloudflare-one/connections/connect-apps/install-and-setup/installation/) must be installed and available in your PATH.
 - Node.js 16+
 
@@ -18,10 +19,10 @@ Before using the CLI, create a **Cloudflare API token** and note your **Zone ID*
 
 ### Required Environment Variables
 
-| Variable               | Description                                             |
-| ---------------------- | ------------------------------------------------------- |
-| `CLOUDFLARE_API_TOKEN` | API Token with permissions (Zone:DNS Edit, Zone:Edit)   |
-| `CLOUDFLARE_ZONE_ID`   | Zone ID for the domain you will create records in       |
+| Variable               | Description                                           |
+| ---------------------- | ----------------------------------------------------- |
+| `CLOUDFLARE_API_TOKEN` | API Token with permissions (Zone:DNS Edit, Zone:Edit) |
+| `CLOUDFLARE_ZONE_ID`   | Zone ID for the domain you will create records in     |
 
 ### Cloudflare API Token Permissions
 
@@ -48,6 +49,7 @@ CLOUDFLARE_ZONE_ID=aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
 ```bash
 tunneler login
 ```
+
 This opens a browser window to complete authentication. You must select your zone to complete setup.
 
 ### Logout and Clean Up Credentials
@@ -55,6 +57,7 @@ This opens a browser window to complete authentication. You must select your zon
 ```bash
 tunneler logout
 ```
+
 Removes all local credentials and configuration. You may also want to revoke your Cloudflare API token in your dashboard.
 
 ---
@@ -66,6 +69,7 @@ Removes all local credentials and configuration. You may also want to revoke you
 ```bash
 tunneler tunnel create --name <tunnel-name>
 ```
+
 Creates a new tunnel and saves configuration locally.
 
 ### List Tunnels
@@ -73,6 +77,7 @@ Creates a new tunnel and saves configuration locally.
 ```bash
 tunneler tunnel list
 ```
+
 Shows all configured tunnels.
 
 ### Delete a Tunnel
@@ -80,6 +85,7 @@ Shows all configured tunnels.
 ```bash
 tunneler tunnel delete --name <tunnel-name>
 ```
+
 Deletes a tunnel from Cloudflare and removes local configuration (with confirmation prompt).
 
 ### Run a Tunnel in Foreground
@@ -87,6 +93,7 @@ Deletes a tunnel from Cloudflare and removes local configuration (with confirmat
 ```bash
 tunneler tunnel run --tunnel <tunnel-name>
 ```
+
 Runs the tunnel in the foreground. Leave this running to keep the tunnel active.
 
 ---
@@ -98,6 +105,7 @@ Runs the tunnel in the foreground. Leave this running to keep the tunnel active.
 ```bash
 tunneler route add --tunnel <tunnel-name> --hostname <hostname> --service <ip:port> [--overwrite]
 ```
+
 - `--overwrite`: Overwrite existing CNAME if it exists.
 - This also creates or updates the CNAME in Cloudflare pointing to the tunnel endpoint.
 
@@ -106,6 +114,7 @@ tunneler route add --tunnel <tunnel-name> --hostname <hostname> --service <ip:po
 ```bash
 tunneler route remove --tunnel <tunnel-name> --hostname <hostname>
 ```
+
 Removes both the ingress rule and the CNAME record in Cloudflare.
 
 ### List Ingress Rules
@@ -113,6 +122,7 @@ Removes both the ingress rule and the CNAME record in Cloudflare.
 ```bash
 tunneler route list --tunnel <tunnel-name>
 ```
+
 Shows all ingress rules for the tunnel.
 
 ---
@@ -124,6 +134,7 @@ Shows all ingress rules for the tunnel.
 ```bash
 tunneler tunnel service install --tunnel <tunnel-name>
 ```
+
 Installs the tunnel as a system service (systemd on Linux, LaunchAgent on macOS).
 
 ### Start the Service
@@ -149,6 +160,7 @@ tunneler tunnel service status --tunnel <tunnel-name>
 ```bash
 tunneler tunnel service uninstall --tunnel <tunnel-name> [--force]
 ```
+
 - `--force`: Skip confirmation prompt.
 
 > **Note:** Service management is not supported on Windows. Use `tunneler tunnel run` to run in foreground mode on Windows.
