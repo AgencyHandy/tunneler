@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 import * as dotenv from "dotenv";
 dotenv.config({ quiet: true });
+import { version } from "../package.json";
 
 import { Command } from "commander";
 import { loginCommand } from "../src/commands/login";
@@ -13,7 +14,7 @@ const program = new Command();
 program
   .name("tunneler")
   .description("Manage Cloudflare tunnels and related DNS operations")
-  .version("0.1.0")
+  .version(version)
   .addHelpText(
     "after",
     `
