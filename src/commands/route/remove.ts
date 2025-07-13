@@ -1,8 +1,6 @@
 import chalk from "chalk";
 import { Command } from "commander";
 import fs from "fs";
-import os from "os";
-import path from "path";
 import yaml from "yaml";
 import { restartCloudflared } from "../../utils/cloudflaredManager";
 import { validateCloudflared } from "../../utils/cloudflaredValidator";
@@ -10,6 +8,7 @@ import {
   deleteCNAME,
   validateCloudflareEnvironment,
 } from "../../utils/cloudflareManager";
+import { getTunnelInfo } from "../../utils/tunnelConfig";
 
 export const removeRoute = new Command("remove")
   .description("Remove an ingress rule and Cloudflare DNS record from a tunnel")
@@ -21,21 +20,11 @@ export const removeRoute = new Command("remove")
 
     const { tunnel, hostname } = opts;
 
-    const configDir = path.join(os.homedir(), ".tunneler");
-    const configPath = path.join(configDir, "config.json");
-
-    if (!fs.existsSync(configPath)) {
-      console.error(
-        chalk.red("No config found. Please run tunneler create first."),
-      );
-      process.exit(1);
-    }
-
-    const configData = JSON.parse(fs.readFileSync(configPath, "utf-8"));
-    const tunnelInfo = configData.tunnels?.[tunnel];
-
-    if (!tunnelInfo) {
-      console.error(chalk.red(`Tunnel "${tunnel}" not found.`));
+    let tunnelInfo;
+    try {
+      tunnelInfo = getTunnelInfo(tunnel);
+    } catch (err: any) {
+      console.error(chalk.red(err.message));
       process.exit(1);
     }
 

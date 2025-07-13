@@ -2,9 +2,8 @@ import chalk from "chalk";
 import { spawn } from "child_process";
 import { Command } from "commander";
 import fs from "fs";
-import os from "os";
-import path from "path";
 import { validateCloudflared } from "../utils/cloudflaredValidator";
+import { getConfigPath } from "../utils/tunnelConfig";
 
 export const loginCommand = new Command("login")
   .description("Authenticate with Cloudflare")
@@ -24,11 +23,7 @@ export const loginCommand = new Command("login")
       }
 
       // Save a timestamp so we know login was done
-      const configDir = path.join(os.homedir(), ".tunneler");
-      if (!fs.existsSync(configDir)) {
-        fs.mkdirSync(configDir, { recursive: true });
-      }
-      const configPath = path.join(configDir, "config.json");
+      const configPath = getConfigPath();
 
       let configData: any = {};
       if (fs.existsSync(configPath)) {

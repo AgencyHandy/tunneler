@@ -1,21 +1,17 @@
 import chalk from "chalk";
 import { Command } from "commander";
-import fs from "fs";
-import os from "os";
-import path from "path";
+import { getConfigData } from "../../utils/tunnelConfig";
 
 export const listTunnel = new Command("list")
   .description("List all tunnels")
   .action(() => {
-    const configDir = path.join(os.homedir(), ".tunneler");
-    const configPath = path.join(configDir, "config.json");
-
-    if (!fs.existsSync(configPath)) {
-      console.log(chalk.yellow("No tunnels found."));
+    let configData;
+    try {
+      configData = getConfigData();
+    } catch (err: any) {
+      console.log(chalk.yellow(err.message));
       process.exit(0);
     }
-
-    const configData = JSON.parse(fs.readFileSync(configPath, "utf-8"));
     const tunnels = configData.tunnels || {};
 
     const names = Object.keys(tunnels);

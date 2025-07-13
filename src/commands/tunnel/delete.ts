@@ -1,11 +1,14 @@
 import chalk from "chalk";
+import { spawnSync } from "child_process";
 import { Command } from "commander";
 import fs from "fs";
-import os from "os";
-import path from "path";
 import inquirer from "inquirer";
-import { spawnSync } from "child_process";
 import { validateCloudflared } from "../../utils/cloudflaredValidator";
+import {
+  getConfigData,
+  getConfigPath,
+  getTunnelInfo,
+} from "../../utils/tunnelConfig";
 
 export const deleteTunnel = new Command("delete")
   .description("Delete a tunnel from Cloudflare and remove local configuration")
@@ -16,18 +19,13 @@ export const deleteTunnel = new Command("delete")
     const { name } = opts;
     console.log(chalk.cyan(`Preparing to delete tunnel "${name}"...`));
 
-    const configDir = path.join(os.homedir(), ".tunneler");
-    const configPath = path.join(configDir, "config.json");
-
-    if (!fs.existsSync(configPath)) {
-      console.error(
-        chalk.red("No config found. Please run tunneler create first."),
-      );
+    let tunnelInfo;
+    try {
+      tunnelInfo = getTunnelInfo(name);
+    } catch (err: any) {
+      console.error(chalk.red(err.message));
       process.exit(1);
     }
-
-    const configData = JSON.parse(fs.readFileSync(configPath, "utf-8"));
-    const tunnelInfo = configData.tunnels?.[name];
 
     if (!tunnelInfo) {
       console.error(chalk.red(`Tunnel "${name}" not found.`));
@@ -74,6 +72,8 @@ export const deleteTunnel = new Command("delete")
     }
 
     // Remove from config.json
+    const configPath = getConfigPath();
+    const configData = getConfigData();
     delete configData.tunnels[name];
     fs.writeFileSync(configPath, JSON.stringify(configData, null, 2));
     console.log(chalk.green(`✅ Removed tunnel "${name}" from local config.`));

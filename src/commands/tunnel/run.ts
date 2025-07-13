@@ -1,9 +1,7 @@
 import chalk from "chalk";
 import { spawn } from "child_process";
 import { Command } from "commander";
-import fs from "fs";
-import os from "os";
-import path from "path";
+import { getTunnelInfo } from "../../utils/tunnelConfig";
 
 export const runTunnel = new Command("run")
   .description("Run cloudflared tunnel in foreground")
@@ -11,21 +9,11 @@ export const runTunnel = new Command("run")
   .action((opts) => {
     const { tunnel } = opts;
 
-    const configDir = path.join(os.homedir(), ".tunneler");
-    const configPath = path.join(configDir, "config.json");
-
-    if (!fs.existsSync(configPath)) {
-      console.error(
-        chalk.red("No config found. Please run tunneler create first."),
-      );
-      process.exit(1);
-    }
-
-    const configData = JSON.parse(fs.readFileSync(configPath, "utf-8"));
-    const tunnelInfo = configData.tunnels?.[tunnel];
-
-    if (!tunnelInfo) {
-      console.error(chalk.red(`Tunnel "${tunnel}" not found.`));
+    let tunnelInfo;
+    try {
+      tunnelInfo = getTunnelInfo(tunnel);
+    } catch (err: any) {
+      console.error(chalk.red(err.message));
       process.exit(1);
     }
 
