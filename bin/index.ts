@@ -23,8 +23,9 @@ Examples:
   $ tunneler route add --tunnel my-tunnel --hostname app.example.com --service localhost:3000
   $ tunneler tunnel run --tunnel my-tunnel
   $ tunneler tunnel service install --tunnel my-tunnel
-  $ tunneler tunnel start --tunnel my-tunnel
+  $ tunneler tunnel service start --tunnel my-tunnel
   $ tunneler tunnel service status --tunnel my-tunnel
+  $ tunneler tunnel service stop --tunnel my-tunnel
   $ tunneler tunnel service uinstall --tunnel my-tunnel
 `,
   );

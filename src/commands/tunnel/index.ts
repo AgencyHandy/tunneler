@@ -4,8 +4,6 @@ import { deleteTunnel } from "./delete";
 import { listTunnel } from "./list";
 import { runTunnel } from "./run";
 import { serviceTunnel } from "./service";
-import { startTunnel } from "./start";
-import { stopTunnel } from "./stop";
 
 export const tunnelCommand = new Command("tunnel")
   .description("Manage tunnels")
@@ -32,17 +30,15 @@ Examples:
   $ tunneler tunnel service uninstall --tunnel my-tunnel
 
   # Start the tunnel system service
-  $ tunneler tunnel start --tunnel my-tunnel
+  $ tunneler tunnel service start --tunnel my-tunnel
 
   # Stop the tunnel system service
-  $ tunneler tunnel stop --tunnel my-tunnel
+  $ tunneler tunnel service stop --tunnel my-tunnel
 `,
   );
 
 tunnelCommand.addCommand(createTunnel);
 tunnelCommand.addCommand(deleteTunnel);
 tunnelCommand.addCommand(serviceTunnel);
-tunnelCommand.addCommand(startTunnel);
-tunnelCommand.addCommand(stopTunnel);
 tunnelCommand.addCommand(runTunnel);
 tunnelCommand.addCommand(listTunnel);
