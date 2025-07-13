@@ -6,7 +6,9 @@ import path from "path";
 import psList from "ps-list";
 
 export async function restartCloudflared(tunnelName: string) {
-  console.log(chalk.cyan(`Restarting cloudflared for tunnel "${tunnelName}"...`));
+  console.log(
+    chalk.cyan(`Restarting cloudflared for tunnel "${tunnelName}"...`),
+  );
 
   const isWindows = os.platform() === "win32";
   let hasSystemctl = false;
@@ -24,18 +26,30 @@ export async function restartCloudflared(tunnelName: string) {
   if (hasSystemctl) {
     console.log(chalk.gray("Detected systemd, restarting with systemctl..."));
     try {
-      execSync(`systemctl restart cloudflared@${tunnelName}`, { stdio: "inherit" });
+      execSync(`systemctl restart cloudflared@${tunnelName}`, {
+        stdio: "inherit",
+      });
       console.log(chalk.green(`✅ cloudflared systemd service restarted.`));
     } catch (err: any) {
-      console.error(chalk.red(`Failed to restart via systemctl: ${err.message}`));
+      console.error(
+        chalk.red(`Failed to restart via systemctl: ${err.message}`),
+      );
       process.exit(1);
     }
   } else {
     // No systemd (or Windows): spawn detached process
-    console.log(chalk.yellow("⚠️ Using process spawn to start cloudflared in background..."));
+    console.log(
+      chalk.yellow(
+        "⚠️ Using process spawn to start cloudflared in background...",
+      ),
+    );
 
     // Determine YAML config path
-    const yamlPath = path.join(os.homedir(), ".tunneler", `${tunnelName}-config.yml`);
+    const yamlPath = path.join(
+      os.homedir(),
+      ".tunneler",
+      `${tunnelName}-config.yml`,
+    );
 
     if (!fs.existsSync(yamlPath)) {
       console.error(chalk.red(`YAML config not found: ${yamlPath}`));
@@ -54,31 +68,27 @@ export async function restartCloudflared(tunnelName: string) {
           "--config",
           `"${yamlPath}"`,
           "run",
-          tunnelName
+          tunnelName,
         ],
         {
           detached: true,
           stdio: "ignore",
-          shell: true
-        }
+          shell: true,
+        },
       );
 
       child.unref();
-      console.log(chalk.green(`✅ cloudflared process started in background (Windows).`));
+      console.log(
+        chalk.green(`✅ cloudflared process started in background (Windows).`),
+      );
     } else {
       const child = spawn(
         "cloudflared",
-        [
-          "tunnel",
-          "--config",
-          yamlPath,
-          "run",
-          tunnelName
-        ],
+        ["tunnel", "--config", yamlPath, "run", tunnelName],
         {
           detached: true,
-          stdio: "ignore"
-        }
+          stdio: "ignore",
+        },
       );
 
       child.unref();
@@ -105,7 +115,9 @@ export async function stopCloudflared(tunnelName: string) {
   if (hasSystemctl) {
     console.log(chalk.gray("Detected systemd, stopping with systemctl..."));
     try {
-      execSync(`systemctl stop cloudflared@${tunnelName}`, { stdio: "inherit" });
+      execSync(`systemctl stop cloudflared@${tunnelName}`, {
+        stdio: "inherit",
+      });
       console.log(chalk.green(`✅ cloudflared systemd service stopped.`));
     } catch (err: any) {
       console.error(chalk.red(`Failed to stop via systemctl: ${err.message}`));
@@ -113,14 +125,19 @@ export async function stopCloudflared(tunnelName: string) {
     }
   } else {
     // No systemd: attempt to find and kill processes
-    console.log(chalk.yellow("⚠️ No systemd detected. Attempting to find and kill cloudflared process..."));
+    console.log(
+      chalk.yellow(
+        "⚠️ No systemd detected. Attempting to find and kill cloudflared process...",
+      ),
+    );
 
     let matches: any[] = [];
     try {
       const processes = await psList();
-      matches = processes.filter(p =>
-        p.name.toLowerCase().includes("cloudflared") &&
-        p.cmd?.includes(tunnelName)
+      matches = processes.filter(
+        (p) =>
+          p.name.toLowerCase().includes("cloudflared") &&
+          p.cmd?.includes(tunnelName),
       );
     } catch (err: any) {
       console.error(chalk.red(`Failed to list processes: ${err.message}`));
@@ -137,7 +154,9 @@ export async function stopCloudflared(tunnelName: string) {
         process.kill(proc.pid);
         console.log(chalk.green(`✅ Killed process PID ${proc.pid}`));
       } catch (err: any) {
-        console.error(chalk.red(`Failed to kill PID ${proc.pid}: ${err.message}`));
+        console.error(
+          chalk.red(`Failed to kill PID ${proc.pid}: ${err.message}`),
+        );
         process.exit(1);
       }
     }

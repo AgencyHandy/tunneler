@@ -19,7 +19,7 @@ export const createTunnel = new Command("create")
     // Run cloudflared
     const result = spawnSync("cloudflared", ["tunnel", "create", tunnelName], {
       stdio: "pipe",
-      encoding: "utf-8"
+      encoding: "utf-8",
     });
 
     if (result.status !== 0) {
@@ -57,14 +57,14 @@ export const createTunnel = new Command("create")
 
     const credentialsPath = path.join(
       os.homedir(),
-      `.cloudflared/${uuid}.json`
+      `.cloudflared/${uuid}.json`,
     );
     const tunnelConfigPath = path.join(configDir, `${tunnelName}-config.yml`);
 
     configData.tunnels[tunnelName] = {
       uuid,
       credentialsPath,
-      configPath: tunnelConfigPath
+      configPath: tunnelConfigPath,
     };
 
     fs.writeFileSync(configPath, JSON.stringify(configData, null, 2));
@@ -77,9 +77,7 @@ export const createTunnel = new Command("create")
     const yamlContent = YAML.stringify({
       tunnel: uuid,
       "credentials-file": credentialsPath,
-      ingress: [
-        { service: "http_status:404" }
-      ]
+      ingress: [{ service: "http_status:404" }],
     });
 
     fs.writeFileSync(tunnelConfigPath, yamlContent, "utf-8");

@@ -1,4 +1,5 @@
 # v0.2.0
+
 - Cleaner UX
 - Add command examples
 - Run tunnel as service.
@@ -7,6 +8,7 @@
 - Delete tunnel
 
 # v0.1.0
+
 - Create tunnel(s)
 - Add ingress rule to tunnel
 - Remove ingress rule from tunnel

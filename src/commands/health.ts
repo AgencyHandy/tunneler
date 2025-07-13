@@ -12,14 +12,16 @@ export const healthCommand = new Command("health")
   .requiredOption("--tunnel <name>", "Tunnel name")
   .action(async (opts) => {
     validateCloudflared();
-    
+
     const { tunnel } = opts;
 
     const configDir = path.join(os.homedir(), ".tunneler");
     const configPath = path.join(configDir, "config.json");
 
     if (!fs.existsSync(configPath)) {
-      console.error(chalk.red("No config found. Please run tunneler create first."));
+      console.error(
+        chalk.red("No config found. Please run tunneler create first."),
+      );
       process.exit(1);
     }
 

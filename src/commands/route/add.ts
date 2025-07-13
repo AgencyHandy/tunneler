@@ -9,7 +9,7 @@ import { validateCloudflared } from "../../utils/cloudflaredValidator";
 import {
   checkIfCNAMEExists,
   createOrUpdateCNAME,
-  validateCloudflareEnvironment
+  validateCloudflareEnvironment,
 } from "../../utils/cloudflareManager";
 
 export const addRoute = new Command("add")
@@ -28,7 +28,9 @@ export const addRoute = new Command("add")
     const configPath = path.join(configDir, "config.json");
 
     if (!fs.existsSync(configPath)) {
-      console.error(chalk.red("No config found. Please run tunneler create first."));
+      console.error(
+        chalk.red("No config found. Please run tunneler create first."),
+      );
       process.exit(1);
     }
 
@@ -41,17 +43,27 @@ export const addRoute = new Command("add")
     }
 
     // ✅ Check if CNAME exists before proceeding
-    console.log(chalk.blue(`🔍 Checking if CNAME "${hostname}" already exists...`));
+    console.log(
+      chalk.blue(`🔍 Checking if CNAME "${hostname}" already exists...`),
+    );
     const exists = await checkIfCNAMEExists(hostname);
     if (exists && !overwrite) {
-      console.error(chalk.red(`❌ A CNAME for "${hostname}" already exists. Use --overwrite to replace it.`));
+      console.error(
+        chalk.red(
+          `❌ A CNAME for "${hostname}" already exists. Use --overwrite to replace it.`,
+        ),
+      );
       process.exit(1);
     }
 
     const yamlPath = tunnelInfo.configPath;
 
     // Load existing YAML
-    let yamlDoc: any = { tunnel, credentialsFile: tunnelInfo.credentialsPath, ingress: [] };
+    let yamlDoc: any = {
+      tunnel,
+      credentialsFile: tunnelInfo.credentialsPath,
+      ingress: [],
+    };
     if (fs.existsSync(yamlPath)) {
       yamlDoc = yaml.parse(fs.readFileSync(yamlPath, "utf-8"));
     } else {
@@ -59,14 +71,18 @@ export const addRoute = new Command("add")
     }
 
     // Remove any old rule for this hostname
-    yamlDoc.ingress = yamlDoc.ingress.filter((rule: any) => rule.hostname !== hostname);
+    yamlDoc.ingress = yamlDoc.ingress.filter(
+      (rule: any) => rule.hostname !== hostname,
+    );
     yamlDoc.ingress.unshift({
       hostname,
-      service: `http://${service}`
+      service: `http://${service}`,
     });
 
     // Ensure fallback rule
-    if (!yamlDoc.ingress.find((r: any) => r.service?.startsWith("http_status"))) {
+    if (
+      !yamlDoc.ingress.find((r: any) => r.service?.startsWith("http_status"))
+    ) {
       yamlDoc.ingress.push({ service: "http_status:404" });
     }
 
@@ -75,14 +91,13 @@ export const addRoute = new Command("add")
     console.log(chalk.green(`✅ Ingress rule added.`));
 
     // Create or update CNAME in Cloudflare
-    await createOrUpdateCNAME(
-      hostname,
-      `${tunnelInfo.uuid}.cfargotunnel.com`
-    );
+    await createOrUpdateCNAME(hostname, `${tunnelInfo.uuid}.cfargotunnel.com`);
 
     // Restart cloudflared
     await restartCloudflared(tunnel);
 
-    console.log(chalk.green(`✅ cloudflared restarted for tunnel "${tunnel}".`));
+    console.log(
+      chalk.green(`✅ cloudflared restarted for tunnel "${tunnel}".`),
+    );
     process.exit(0);
   });

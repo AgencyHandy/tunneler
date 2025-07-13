@@ -15,7 +15,7 @@ export const uninstallService = new Command("uninstall")
 
     if (platform === "win32") {
       console.error(
-        chalk.red("Service uninstall is not applicable on Windows.")
+        chalk.red("Service uninstall is not applicable on Windows."),
       );
       process.exit(1);
     }
@@ -56,7 +56,7 @@ export const uninstallService = new Command("uninstall")
       const plistPath = path.join(
         os.homedir(),
         "Library/LaunchAgents",
-        `com.tunneler.${tunnel}.plist`
+        `com.tunneler.${tunnel}.plist`,
       );
       console.log(chalk.green(`✅ Unloading and removing LaunchAgent...`));
       try {

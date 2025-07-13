@@ -12,9 +12,9 @@ Examples:
   $ tunneler route add --tunnel my-tunnel --hostname app.example.com --service localhost:3000
   $ tunneler route list --tunnel my-tunnel
   $ tunneler route remove --tunnel my-tunnel --hostname app.example.com
-`
+`,
   );
 
 routeCommand.addCommand(addRoute);
-routeCommand.addCommand(listRoutes)
+routeCommand.addCommand(listRoutes);
 routeCommand.addCommand(removeRoute);

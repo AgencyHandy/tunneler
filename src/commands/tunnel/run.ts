@@ -15,7 +15,9 @@ export const runTunnel = new Command("run")
     const configPath = path.join(configDir, "config.json");
 
     if (!fs.existsSync(configPath)) {
-      console.error(chalk.red("No config found. Please run tunneler create first."));
+      console.error(
+        chalk.red("No config found. Please run tunneler create first."),
+      );
       process.exit(1);
     }
 
@@ -32,7 +34,7 @@ export const runTunnel = new Command("run")
     const proc = spawn(
       "cloudflared",
       ["tunnel", "--config", tunnelInfo.configPath, "run"],
-      { stdio: "inherit" }
+      { stdio: "inherit" },
     );
 
     proc.on("exit", (code) => {

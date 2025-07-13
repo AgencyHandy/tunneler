@@ -25,7 +25,6 @@ WantedBy=multi-user.target
     fs.writeFileSync(servicePath, unitFile, { mode: 0o644 });
     require("child_process").execSync(`systemctl daemon-reload`);
     require("child_process").execSync(`systemctl enable tunneler-${tunnel}`);
-
   } else if (platform === "darwin") {
     const plist = `
 <?xml version="1.0" encoding="UTF-8"?>
@@ -57,11 +56,13 @@ WantedBy=multi-user.target
     const plistPath = path.join(
       os.homedir(),
       "Library/LaunchAgents",
-      `com.tunneler.${tunnel}.plist`
+      `com.tunneler.${tunnel}.plist`,
     );
     fs.writeFileSync(plistPath, plist, { mode: 0o644 });
   } else {
-    console.error(`Service installation not supported on platform "${platform}".`);
+    console.error(
+      `Service installation not supported on platform "${platform}".`,
+    );
     process.exit(1);
   }
 }

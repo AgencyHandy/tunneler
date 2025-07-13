@@ -14,7 +14,7 @@ export const installService = new Command("install")
 
     if (platform === "win32") {
       console.error(
-        chalk.red("Installing as a service is not supported on Windows.")
+        chalk.red("Installing as a service is not supported on Windows."),
       );
       process.exit(1);
     }
@@ -24,7 +24,7 @@ export const installService = new Command("install")
 
     if (!fs.existsSync(configPath)) {
       console.error(
-        chalk.red("No config found. Please run tunneler create first.")
+        chalk.red("No config found. Please run tunneler create first."),
       );
       process.exit(1);
     }
@@ -42,7 +42,9 @@ export const installService = new Command("install")
       const servicePath = `/etc/systemd/system/tunneler-${tunnel}.service`;
       if (fs.existsSync(servicePath)) {
         console.error(
-          chalk.red(`Service already exists. Uninstall it first if you want to replace it.`)
+          chalk.red(
+            `Service already exists. Uninstall it first if you want to replace it.`,
+          ),
         );
         process.exit(1);
       }
@@ -50,11 +52,13 @@ export const installService = new Command("install")
       const plistPath = path.join(
         os.homedir(),
         "Library/LaunchAgents",
-        `com.tunneler.${tunnel}.plist`
+        `com.tunneler.${tunnel}.plist`,
       );
       if (fs.existsSync(plistPath)) {
         console.error(
-          chalk.red(`Service already exists. Uninstall it first if you want to replace it.`)
+          chalk.red(
+            `Service already exists. Uninstall it first if you want to replace it.`,
+          ),
         );
         process.exit(1);
       }

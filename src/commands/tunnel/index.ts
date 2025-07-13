@@ -37,7 +37,7 @@ Examples:
 
   # Stop the tunnel system service
   $ tunneler tunnel stop --tunnel my-tunnel
-`
+`,
   );
 
 tunnelCommand.addCommand(createTunnel);

@@ -13,7 +13,9 @@ export const loginCommand = new Command("login")
 
     console.log(chalk.cyan("Launching Cloudflare login..."));
 
-    const proc = spawn("cloudflared", ["tunnel", "login"], { stdio: "inherit" });
+    const proc = spawn("cloudflared", ["tunnel", "login"], {
+      stdio: "inherit",
+    });
 
     proc.on("exit", (code) => {
       if (code !== 0) {

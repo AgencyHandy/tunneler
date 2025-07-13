@@ -8,10 +8,12 @@ export const statusTunnel = new Command("status")
   .requiredOption("--tunnel <name>", "Tunnel name")
   .action(async (opts) => {
     validateCloudflared();
-    
+
     const { tunnel } = opts;
 
-    console.log(chalk.cyan(`Checking cloudflared status for tunnel "${tunnel}"...`));
+    console.log(
+      chalk.cyan(`Checking cloudflared status for tunnel "${tunnel}"...`),
+    );
 
     const serviceName = `cloudflared@${tunnel}`;
 
@@ -25,7 +27,9 @@ export const statusTunnel = new Command("status")
       if (status === "active") {
         console.log(chalk.green(`✅ Tunnel "${tunnel}" is running.`));
       } else {
-        console.log(chalk.red(`❌ Tunnel "${tunnel}" is not running. Status: ${status}`));
+        console.log(
+          chalk.red(`❌ Tunnel "${tunnel}" is not running. Status: ${status}`),
+        );
       }
 
       console.log(chalk.cyan("\nRecent logs:"));

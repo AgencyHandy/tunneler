@@ -20,7 +20,9 @@ export const deleteTunnel = new Command("delete")
     const configPath = path.join(configDir, "config.json");
 
     if (!fs.existsSync(configPath)) {
-      console.error(chalk.red("No config found. Please run tunneler create first."));
+      console.error(
+        chalk.red("No config found. Please run tunneler create first."),
+      );
       process.exit(1);
     }
 
@@ -37,8 +39,8 @@ export const deleteTunnel = new Command("delete")
         type: "confirm",
         name: "proceed",
         message: `This will delete the tunnel from Cloudflare and remove local config. Continue?`,
-        default: false
-      }
+        default: false,
+      },
     ]);
 
     if (!confirm.proceed) {
@@ -49,7 +51,7 @@ export const deleteTunnel = new Command("delete")
     // Delete from Cloudflare
     console.log(chalk.cyan(`Deleting tunnel from Cloudflare...`));
     const result = spawnSync("cloudflared", ["tunnel", "delete", name], {
-      stdio: "inherit"
+      stdio: "inherit",
     });
 
     if (result.status !== 0) {
@@ -66,7 +68,9 @@ export const deleteTunnel = new Command("delete")
     // Remove credentials file
     if (fs.existsSync(tunnelInfo.credentialsPath)) {
       fs.unlinkSync(tunnelInfo.credentialsPath);
-      console.log(chalk.green(`✅ Removed credentials: ${tunnelInfo.credentialsPath}`));
+      console.log(
+        chalk.green(`✅ Removed credentials: ${tunnelInfo.credentialsPath}`),
+      );
     }
 
     // Remove from config.json

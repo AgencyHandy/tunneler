@@ -16,7 +16,7 @@ Examples:
 
   # Uninstall without confirmation prompt
   $ tunneler tunnel service uninstall --tunnel my-tunnel --force
-`
+`,
   );
 
 serviceTunnel.addCommand(installService);

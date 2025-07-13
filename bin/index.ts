@@ -23,7 +23,7 @@ Examples:
   $ tunneler route add --tunnel my-tunnel --hostname app.example.com --service localhost:3000
   $ tunneler tunnel run --tunnel my-tunnel
   $ tunneler tunnel status --tunnel my-tunnel
-`
+`,
   );
 
 program.addCommand(loginCommand);

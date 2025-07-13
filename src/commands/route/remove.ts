@@ -6,7 +6,10 @@ import path from "path";
 import yaml from "yaml";
 import { restartCloudflared } from "../../utils/cloudflaredManager";
 import { validateCloudflared } from "../../utils/cloudflaredValidator";
-import { deleteCNAME, validateCloudflareEnvironment } from "../../utils/cloudflareManager";
+import {
+  deleteCNAME,
+  validateCloudflareEnvironment,
+} from "../../utils/cloudflareManager";
 
 export const removeRoute = new Command("remove")
   .description("Remove an ingress rule and Cloudflare DNS record from a tunnel")
@@ -22,7 +25,9 @@ export const removeRoute = new Command("remove")
     const configPath = path.join(configDir, "config.json");
 
     if (!fs.existsSync(configPath)) {
-      console.error(chalk.red("No config found. Please run tunneler create first."));
+      console.error(
+        chalk.red("No config found. Please run tunneler create first."),
+      );
       process.exit(1);
     }
 
@@ -46,11 +51,13 @@ export const removeRoute = new Command("remove")
 
     const beforeCount = yamlDoc.ingress?.length || 0;
     yamlDoc.ingress = yamlDoc.ingress.filter(
-      (rule: any) => rule.hostname !== hostname
+      (rule: any) => rule.hostname !== hostname,
     );
 
     if (yamlDoc.ingress.length === beforeCount) {
-      console.log(chalk.yellow(`⚠️ No matching ingress rule found for ${hostname}.`));
+      console.log(
+        chalk.yellow(`⚠️ No matching ingress rule found for ${hostname}.`),
+      );
     } else {
       fs.writeFileSync(yamlPath, yaml.stringify(yamlDoc));
       console.log(chalk.green(`✅ Removed ingress rule for ${hostname}.`));
@@ -62,6 +69,8 @@ export const removeRoute = new Command("remove")
     // Restart cloudflared
     await restartCloudflared(tunnel);
 
-    console.log(chalk.green(`✅ cloudflared restarted for tunnel "${tunnel}".`));
+    console.log(
+      chalk.green(`✅ cloudflared restarted for tunnel "${tunnel}".`),
+    );
     process.exit(0);
   });

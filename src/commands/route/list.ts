@@ -11,14 +11,16 @@ export const listRoutes = new Command("list")
   .requiredOption("--tunnel <name>", "Tunnel name")
   .action((opts) => {
     validateCloudflared();
-    
+
     const { tunnel } = opts;
 
     const configDir = path.join(os.homedir(), ".tunneler");
     const configPath = path.join(configDir, "config.json");
 
     if (!fs.existsSync(configPath)) {
-      console.error(chalk.red("No config found. Please run tunneler create first."));
+      console.error(
+        chalk.red("No config found. Please run tunneler create first."),
+      );
       process.exit(1);
     }
 
@@ -50,11 +52,11 @@ export const listRoutes = new Command("list")
     ingress.forEach((rule: any, index: number) => {
       if (rule.hostname) {
         console.log(
-          chalk.green(` ${index + 1}. ${rule.hostname} -> ${rule.service}`)
+          chalk.green(` ${index + 1}. ${rule.hostname} -> ${rule.service}`),
         );
       } else if (rule.service?.startsWith("http_status")) {
         console.log(
-          chalk.gray(` ${index + 1}. Default fallback: ${rule.service}`)
+          chalk.gray(` ${index + 1}. Default fallback: ${rule.service}`),
         );
       }
     });
