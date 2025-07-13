@@ -1,6 +1,7 @@
 import { Command } from "commander";
 import { installService } from "./install";
 import { uninstallService } from "./uninstall";
+import { statusTunnel } from "./status";
 
 export const serviceTunnel = new Command("service")
   .description("Manage tunnel system services")
@@ -14,6 +15,9 @@ Examples:
   # Uninstall the service for a tunnel
   $ tunneler tunnel service uninstall --tunnel my-tunnel
 
+  # Status of a installed service
+  $ tunneler tunnel service status --tunnel my-tunnel
+
   # Uninstall without confirmation prompt
   $ tunneler tunnel service uninstall --tunnel my-tunnel --force
 `,
@@ -21,3 +25,4 @@ Examples:
 
 serviceTunnel.addCommand(installService);
 serviceTunnel.addCommand(uninstallService);
+serviceTunnel.addCommand(statusTunnel);

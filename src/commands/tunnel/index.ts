@@ -5,7 +5,6 @@ import { listTunnel } from "./list";
 import { runTunnel } from "./run";
 import { serviceTunnel } from "./service";
 import { startTunnel } from "./start";
-import { statusTunnel } from "./status";
 import { stopTunnel } from "./stop";
 
 export const tunnelCommand = new Command("tunnel")
@@ -47,4 +46,3 @@ tunnelCommand.addCommand(startTunnel);
 tunnelCommand.addCommand(stopTunnel);
 tunnelCommand.addCommand(runTunnel);
 tunnelCommand.addCommand(listTunnel);
-tunnelCommand.addCommand(statusTunnel);

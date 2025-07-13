@@ -27,6 +27,10 @@ WantedBy=multi-user.target
     execSync(`systemctl daemon-reload`);
     execSync(`systemctl enable tunneler-${tunnel}`);
   } else if (platform === "darwin") {
+    const cloudflaredPath = execSync("which cloudflared", {
+      encoding: "utf-8",
+    }).trim();
+
     const plist = `
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN"
@@ -37,7 +41,7 @@ WantedBy=multi-user.target
   <string>com.tunneler.${tunnel}</string>
   <key>ProgramArguments</key>
   <array>
-    <string>/usr/local/bin/cloudflared</string>
+    <string>${cloudflaredPath}</string>
     <string>tunnel</string>
     <string>--config</string>
     <string>${configPath}</string>
@@ -54,6 +58,7 @@ WantedBy=multi-user.target
 </dict>
 </plist>
 `;
+
     const plistPath = path.join(
       os.homedir(),
       "Library/LaunchAgents",
