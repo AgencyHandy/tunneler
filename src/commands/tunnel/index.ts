@@ -6,7 +6,17 @@ import { listTunnel } from "./list";
 import { statusTunnel } from "./status";
 
 export const tunnelCommand = new Command("tunnel")
-  .description("Manage tunnels");
+  .description("Manage tunnels")
+  .addHelpText(
+    "after",
+    `
+Examples:
+  $ tunneler tunnel create --name my-tunnel
+  $ tunneler tunnel run --tunnel my-tunnel
+  $ tunneler tunnel list
+  $ tunneler tunnel delete --name my-tunnel
+`
+  );
 
 tunnelCommand.addCommand(createTunnel);
 tunnelCommand.addCommand(deleteTunnel);

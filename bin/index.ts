@@ -13,7 +13,18 @@ const program = new Command();
 program
   .name("tunneler")
   .description("Manage Cloudflare tunnels and related DNS operations")
-  .version("0.1.0");
+  .version("0.1.0")
+  .addHelpText(
+    "after",
+    `
+Examples:
+  $ tunneler login
+  $ tunneler tunnel create --name my-tunnel
+  $ tunneler route add --tunnel my-tunnel --hostname app.example.com --service localhost:3000
+  $ tunneler tunnel run --tunnel my-tunnel
+  $ tunneler tunnel status --tunnel my-tunnel
+`
+  );
 
 program.addCommand(loginCommand);
 program.addCommand(logoutCommand);
