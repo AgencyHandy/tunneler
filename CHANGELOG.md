@@ -6,6 +6,7 @@
 - See tunnel list
 - See ingress routes of a tunnel
 - Delete tunnel
+- Check tunnel status
 
 # v0.1.0
 
