@@ -15,6 +15,7 @@ export const logoutCommand = new Command("logout")
       spawnSync("cloudflared", ["service", "uninstall"], { stdio: "ignore" });
     } catch {
       // Ignore error
+      process.exit(1)
     }
 
     // NOTE: We skip tunnel cleanup because we are deleting credentials anyway
@@ -39,4 +40,5 @@ export const logoutCommand = new Command("logout")
 
     console.log(chalk.green("✅ Successfully logged out and cleaned up."));
     console.log(chalk.yellow("⚠️ Remember to revoke the Cloudflare API token in your dashboard under My Profile > API Tokens if desired."));
+    process.exit(0);
   });

@@ -84,4 +84,5 @@ export const addRoute = new Command("add")
     await restartCloudflared(tunnel);
 
     console.log(chalk.green(`✅ cloudflared restarted for tunnel "${tunnel}".`));
+    process.exit(0);
   });

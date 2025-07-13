@@ -63,4 +63,5 @@ export const removeRoute = new Command("remove")
     await restartCloudflared(tunnel);
 
     console.log(chalk.green(`✅ cloudflared restarted for tunnel "${tunnel}".`));
+    process.exit(0);
   });

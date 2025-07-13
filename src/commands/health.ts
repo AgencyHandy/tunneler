@@ -58,4 +58,5 @@ export const healthCommand = new Command("health")
         console.log(chalk.red(`❌ ${err.message}`));
       }
     }
+    process.exit(0);
   });

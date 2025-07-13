@@ -115,11 +115,17 @@ export async function stopCloudflared(tunnelName: string) {
     // No systemd: attempt to find and kill processes
     console.log(chalk.yellow("⚠️ No systemd detected. Attempting to find and kill cloudflared process..."));
 
-    const processes = await psList();
-    const matches = processes.filter(p =>
-      p.name.toLowerCase().includes("cloudflared") &&
-      p.cmd?.includes(tunnelName)
-    );
+    let matches: any[] = [];
+    try {
+      const processes = await psList();
+      matches = processes.filter(p =>
+        p.name.toLowerCase().includes("cloudflared") &&
+        p.cmd?.includes(tunnelName)
+      );
+    } catch (err: any) {
+      console.error(chalk.red(`Failed to list processes: ${err.message}`));
+      process.exit(1);
+    }
 
     if (matches.length === 0) {
       console.log(chalk.yellow("⚠️ No cloudflared process found."));
@@ -132,6 +138,7 @@ export async function stopCloudflared(tunnelName: string) {
         console.log(chalk.green(`✅ Killed process PID ${proc.pid}`));
       } catch (err: any) {
         console.error(chalk.red(`Failed to kill PID ${proc.pid}: ${err.message}`));
+        process.exit(1);
       }
     }
   }

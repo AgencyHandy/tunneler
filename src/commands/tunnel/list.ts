@@ -58,4 +58,5 @@ export const listTunnel = new Command("list")
         );
       }
     });
+    process.exit(0);
   });

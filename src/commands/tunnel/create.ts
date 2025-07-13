@@ -84,4 +84,5 @@ export const createTunnel = new Command("create")
 
     fs.writeFileSync(tunnelConfigPath, yamlContent, "utf-8");
     console.log(chalk.green(`✅ YAML config created at ${tunnelConfigPath}`));
+    process.exit(0);
   });
