@@ -44,7 +44,16 @@ export const stopTunnel = new Command("stop")
         `com.tunneler.${tunnel}.plist`,
       );
 
-      console.log(chalk.green(`✅ Unloading and removing LaunchAgent...`));
+      if (!fs.existsSync(plistPath)) {
+        console.error(
+          chalk.red(
+            `The LaunchAgent plist for tunnel "${tunnel}" does not exist.`,
+          ),
+        );
+        process.exit(1);
+      }
+
+      console.log(chalk.green(`✅ Unloading LaunchAgent for '${tunnel}'...`));
       try {
         execSync(`launchctl bootout gui/$(id -u) ${plistPath}`, {
           stdio: "ignore",
@@ -53,24 +62,7 @@ export const stopTunnel = new Command("stop")
         // ignore if not loaded
       }
 
-      if (fs.existsSync(plistPath)) {
-        fs.unlinkSync(plistPath);
-      }
-
-      console.log(
-        chalk.green(
-          `✅ Killing any remaining cloudflared processes for tunnel '${tunnel}'...`,
-        ),
-      );
-      try {
-        execSync(`pgrep -f "cloudflared tunnel.*${tunnel}" | xargs kill -9`, {
-          stdio: "ignore",
-        });
-      } catch {
-        // no process found is fine
-      }
-
-      console.log(chalk.green(`✅ Service uninstalled.`));
+      console.log(chalk.green(`✅ Service stopped.`));
     } else {
       console.error(chalk.red(`Unsupported platform '${platform}'.`));
       process.exit(1);
