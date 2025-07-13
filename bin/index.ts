@@ -9,7 +9,6 @@ import { listCommand } from "../src/commands/list";
 import { loginCommand } from "../src/commands/login";
 import { removeCommand } from "../src/commands/remove";
 import { runCommand } from "../src/commands/run";
-import { statusCommand } from "../src/commands/status";
 import { logoutCommand } from "../src/commands/logout";
 
 const program = new Command();
@@ -26,6 +25,7 @@ program.addCommand(addCommand);
 program.addCommand(runCommand);
 program.addCommand(removeCommand);
 program.addCommand(listCommand);
-program.addCommand(statusCommand);
+// program.addCommand(statusCommand);
+// program.addCommand(healthCommand)
 
 program.parse(process.argv);
