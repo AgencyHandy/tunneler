@@ -1,3 +1,6 @@
+# v0.2.3
+- Remove `dist/package.json` from package
+
 # v0.2.2
 - Add `eslint.config.js` in `.npmignore`
 
