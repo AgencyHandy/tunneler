@@ -19,11 +19,12 @@
     "yaml": "^2.8.0"
   },
   "devDependencies": {
+    "@types/inquirer": "^9.0.8",
     "@types/node": "^24.0.12",
     "ts-node": "^10.x",
     "typescript": "^5.x"
   },
-    "repository": {
+  "repository": {
     "type": "git",
     "url": "https://github.com/agencyhandy/tunneler.git"
   },
