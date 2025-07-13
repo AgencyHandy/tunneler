@@ -1,6 +1,6 @@
 {
   "name": "@agencyhandy/tunneler",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "description": "CLI tool to manage Cloudflare tunnels and related DNS operations",
   "bin": {
     "tunneler": "./dist/bin/index.js"
