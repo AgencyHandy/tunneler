@@ -1,4 +1,5 @@
 import chalk from "chalk";
+import { execSync } from "child_process";
 import { Command } from "commander";
 import fs from "fs";
 import os from "os";
@@ -32,7 +33,7 @@ export const stopTunnel = new Command("stop")
       }
 
       console.log(chalk.green(`✅ Stopping service 'tunneler-${tunnel}'...`));
-      require("child_process").execSync(`systemctl stop tunneler-${tunnel}`, {
+      execSync(`systemctl stop tunneler-${tunnel}`, {
         stdio: "inherit",
       });
       console.log(chalk.green(`✅ Service stopped.`));
@@ -45,10 +46,9 @@ export const stopTunnel = new Command("stop")
 
       console.log(chalk.green(`✅ Unloading and removing LaunchAgent...`));
       try {
-        require("child_process").execSync(
-          `launchctl bootout gui/$(id -u) ${plistPath}`,
-          { stdio: "ignore" },
-        );
+        execSync(`launchctl bootout gui/$(id -u) ${plistPath}`, {
+          stdio: "ignore",
+        });
       } catch {
         // ignore if not loaded
       }
@@ -63,10 +63,9 @@ export const stopTunnel = new Command("stop")
         ),
       );
       try {
-        require("child_process").execSync(
-          `pgrep -f "cloudflared tunnel.*${tunnel}" | xargs kill -9`,
-          { stdio: "ignore" },
-        );
+        execSync(`pgrep -f "cloudflared tunnel.*${tunnel}" | xargs kill -9`, {
+          stdio: "ignore",
+        });
       } catch {
         // no process found is fine
       }

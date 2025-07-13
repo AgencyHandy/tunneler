@@ -1,4 +1,5 @@
 import chalk from "chalk";
+import { execSync } from "child_process";
 import { Command } from "commander";
 import fs from "fs";
 import inquirer from "inquirer";
@@ -36,7 +37,6 @@ export const uninstallService = new Command("uninstall")
       }
     }
 
-    const { execSync } = require("child_process");
     if (platform === "linux") {
       console.log(chalk.green(`✅ Stopping and disabling the service...`));
       try {

@@ -1,4 +1,5 @@
 import chalk from "chalk";
+import { execSync } from "child_process";
 import { Command } from "commander";
 import fs from "fs";
 import os from "os";
@@ -68,7 +69,7 @@ export const installService = new Command("install")
     await installAsService(tunnel, tunnelInfo.configPath);
 
     if (platform === "linux") {
-      require("child_process").execSync(`systemctl enable tunneler-${tunnel}`);
+      execSync(`systemctl enable tunneler-${tunnel}`);
       console.log(chalk.green(`✅ Service installed and enabled.`));
       console.log(chalk.yellow(`You can start it with:`));
       console.log(`  tunneler tunnel start --tunnel ${tunnel}`);

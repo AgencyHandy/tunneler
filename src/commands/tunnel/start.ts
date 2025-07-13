@@ -1,4 +1,5 @@
 import chalk from "chalk";
+import { execSync } from "child_process";
 import { Command } from "commander";
 import fs from "fs";
 import os from "os";
@@ -32,7 +33,7 @@ export const startTunnel = new Command("start")
       }
 
       console.log(chalk.green(`✅ Starting service 'tunneler-${tunnel}'...`));
-      require("child_process").execSync(`systemctl start tunneler-${tunnel}`, {
+      execSync(`systemctl start tunneler-${tunnel}`, {
         stdio: "inherit",
       });
       console.log(chalk.green(`✅ Service started.`));
@@ -52,7 +53,7 @@ export const startTunnel = new Command("start")
       }
 
       console.log(chalk.green(`✅ Loading LaunchAgent for '${tunnel}'...`));
-      require("child_process").execSync(`launchctl load ${plistPath}`, {
+      execSync(`launchctl load ${plistPath}`, {
         stdio: "inherit",
       });
       console.log(chalk.green(`✅ Service started.`));

@@ -1,3 +1,4 @@
+import { execSync } from "child_process";
 import fs from "fs";
 import os from "os";
 import path from "path";
@@ -23,8 +24,8 @@ WantedBy=multi-user.target
 
     const servicePath = `/etc/systemd/system/tunneler-${tunnel}.service`;
     fs.writeFileSync(servicePath, unitFile, { mode: 0o644 });
-    require("child_process").execSync(`systemctl daemon-reload`);
-    require("child_process").execSync(`systemctl enable tunneler-${tunnel}`);
+    execSync(`systemctl daemon-reload`);
+    execSync(`systemctl enable tunneler-${tunnel}`);
   } else if (platform === "darwin") {
     const plist = `
 <?xml version="1.0" encoding="UTF-8"?>
