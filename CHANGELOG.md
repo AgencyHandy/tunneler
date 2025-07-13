@@ -1,3 +1,6 @@
+# v0.3.0
+- Push compiled `src` to npm
+
 # v0.2.4
 - Add `dist/package.json` to package
 

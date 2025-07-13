@@ -1,5 +1,7 @@
 src/
+!dist/src/*
 bin/
+!dist/bin/*
 node_modules/
 *.ts
 tsconfig.json
