@@ -1,3 +1,7 @@
+# v0.2.1
+- Remove duplicated instructions of Cloudflare API token
+- Updated informatin about the project
+
 # v0.2.0
 
 - Cleaner UX

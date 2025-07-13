@@ -2,6 +2,10 @@
 
 A CLI tool to manage Cloudflare Tunnels and DNS records without leaving your terminal.
 
+## About
+
+Tunneler is not just another wrapper around cloudflared or Cloudflare's APIs. It is a genuine solution to a genuine problem: simplifying and automating the management of Cloudflare Tunnels and DNS records for developers and teams. Unlike basic wrappers, Tunneler provides a seamless, end-to-end experience for authentication, tunnel lifecycle management, DNS automation, and system service integration—all from your terminal. Whether you need to quickly expose a local service, automate ingress rules, or run tunnels as a system service, Tunneler is designed to make these workflows effortless, reliable, and secure.
+
 ## Installation
 
 ```bash
@@ -21,17 +25,9 @@ Before using the CLI, create a **Cloudflare API token** and note your **Zone ID*
 
 | Variable               | Description                                           |
 | ---------------------- | ----------------------------------------------------- |
-| `CLOUDFLARE_API_TOKEN` | API Token with permissions (Zone:DNS Edit, Zone:Edit) |
+| `CLOUDFLARE_API_TOKEN` | API Token with permissions (Zone:DNS Edit & Read, Zone:Edit & Read) |
 | `CLOUDFLARE_ZONE_ID`   | Zone ID for the domain you will create records in     |
 
-### Cloudflare API Token Permissions
-
-Your API token must have the following permissions for the relevant zone:
-
-- **Zone:DNS → Edit, Read**
-- **Zone → Edit, Read**
-
-These permissions allow the CLI to create, update, and remove DNS records in your Cloudflare zone, as well as manage tunnel resources.
 
 You can set these variables in your shell or in a `.env` file in your working directory:
 
