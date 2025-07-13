@@ -1,6 +1,7 @@
 import { Command } from "commander";
 import { addRoute } from "./add";
 import { removeRoute } from "./remove";
+import { listRoutes } from "./list";
 
 export const routeCommand = new Command("route")
   .description("Manage ingress routes for tunnels")
@@ -15,4 +16,5 @@ Examples:
   );
 
 routeCommand.addCommand(addRoute);
+routeCommand.addCommand(listRoutes)
 routeCommand.addCommand(removeRoute);
