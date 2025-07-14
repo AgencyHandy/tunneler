@@ -1,3 +1,6 @@
+# v0.3.1
+- Fix correct path for `cloudflared` during service installation for linux
+
 # v0.3.0
 - Push compiled `src` to npm
 

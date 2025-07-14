@@ -7,13 +7,18 @@ export async function installAsService(tunnel: string, configPath: string) {
   const platform = os.platform();
 
   if (platform === "linux") {
+    // Dynamically find the binary path
+    const cloudflaredPath = execSync("which cloudflared", {
+      encoding: "utf-8",
+    }).trim();
+
     const unitFile = `
 [Unit]
 Description=Tunneler Cloudflared Tunnel (${tunnel})
 After=network.target
 
 [Service]
-ExecStart=/usr/bin/cloudflared tunnel --config ${configPath} run
+ExecStart=${cloudflaredPath} tunnel --config ${configPath} run
 Restart=always
 User=${process.env.USER}
 Environment=PATH=/usr/bin:/bin
