@@ -222,5 +222,5 @@ MIT
 ## Maintainer
 
 S M Mahmudul Hasan  
-[hasan@agencyhandy.com](mailto:hasan@agencyhandy.com)  
+[hasan@smmh.xyz](mailto:hasan@smmh.xyz)  
 [GitHub: @IamLizu](https://github.com/IamLizu)
