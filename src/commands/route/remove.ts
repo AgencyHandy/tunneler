@@ -8,6 +8,7 @@ import {
   deleteCNAME,
   validateCloudflareEnvironment,
 } from "../../utils/cloudflareManager";
+import { shouldRestartService } from "../../utils/system";
 import { getTunnelInfo } from "../../utils/tunnelConfig";
 
 export const removeRoute = new Command("remove")
@@ -56,10 +57,8 @@ export const removeRoute = new Command("remove")
     await deleteCNAME(hostname);
 
     // Restart cloudflared
-    await restartCloudflared(tunnel);
-
-    console.log(
-      chalk.green(`✅ cloudflared restarted for tunnel "${tunnel}".`),
-    );
+    if (shouldRestartService(tunnel)) {
+      await restartCloudflared(tunnel);
+    }
     process.exit(0);
   });
