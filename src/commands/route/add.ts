@@ -32,9 +32,6 @@ export const addRoute = new Command("add")
     }
 
     // ✅ Check if CNAME exists before proceeding
-    console.log(
-      chalk.blue(`🔍 Checking if CNAME "${hostname}" already exists...`),
-    );
     const exists = await checkIfCNAMEExists(hostname);
     if (exists && !overwrite) {
       console.error(
