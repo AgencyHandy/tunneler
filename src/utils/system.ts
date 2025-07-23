@@ -152,6 +152,42 @@ WantedBy=multi-user.target
   }
 }
 
+export async function uninstallService(tunnel: string) {
+  const platform = detectPlatform();
+  const servicePath = getServicePath(tunnel, platform);
+
+  if (platform.hasSystemctl) {
+    try {
+      // Disable before deleting
+      execSync(`systemctl disable tunneler-${tunnel}`, { stdio: "ignore" });
+    } catch (e) {
+      // Maybe not enabled, ignoring error
+    }
+
+    if (fs.existsSync(servicePath)) {
+      fs.unlinkSync(servicePath);
+    }
+
+    execSync(`systemctl daemon-reload`);
+  } else if (platform.isMacOS) {
+    // Unload before deleting
+    try {
+      execSync(`launchctl unload ${servicePath}`, { stdio: "ignore" });
+    } catch (e) {
+      // Might not be loaded, ignoring
+    }
+
+    if (fs.existsSync(servicePath)) {
+      fs.unlinkSync(servicePath);
+    }
+  } else {
+    console.error(
+      `Service uninstallation not supported on platform "${platform.name || platform}".`,
+    );
+    process.exit(1);
+  }
+}
+
 export function shouldRestartService(
   tunnelName: string,
   platformInfo?: PlatformInfo,
