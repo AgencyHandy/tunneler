@@ -27,8 +27,6 @@ export const createTunnel = new Command("create")
       process.exit(result.status || 1);
     }
 
-    console.log(chalk.green(`✅ Tunnel "${tunnelName}" created.`));
-
     // Extract UUID from credentials file path
     const credMatch = result.stdout.match(/\/([a-f0-9-]{36})\.json/);
     if (!credMatch) {
@@ -69,7 +67,6 @@ export const createTunnel = new Command("create")
 
     fs.writeFileSync(configPath, JSON.stringify(configData, null, 2));
 
-    console.log(chalk.green("✅ Tunnel metadata saved."));
     console.log(chalk.yellow(`Credentials path: ${credentialsPath}`));
     console.log(chalk.yellow(`Config YAML path: ${tunnelConfigPath}`));
 
@@ -81,6 +78,7 @@ export const createTunnel = new Command("create")
     });
 
     fs.writeFileSync(tunnelConfigPath, yamlContent, "utf-8");
-    console.log(chalk.green(`✅ YAML config created at ${tunnelConfigPath}`));
+
+    console.log(chalk.green(`✅ Tunnel "${tunnelName}" created.`));
     process.exit(0);
   });
