@@ -9,6 +9,7 @@ import {
   createOrUpdateCNAME,
   validateCloudflareEnvironment,
 } from "../../utils/cloudflareManager";
+import { shouldRestartService } from "../../utils/system";
 import { getTunnelInfo } from "../../utils/tunnelConfig";
 
 export const addRoute = new Command("add")
@@ -80,10 +81,12 @@ export const addRoute = new Command("add")
     await createOrUpdateCNAME(hostname, `${tunnelInfo.uuid}.cfargotunnel.com`);
 
     // Restart cloudflared
-    await restartCloudflared(tunnel);
-
-    console.log(
-      chalk.green(`✅ cloudflared restarted for tunnel "${tunnel}".`),
-    );
+    if (shouldRestartService(tunnel)) {
+      await restartCloudflared(tunnel);
+    } else {
+      console.log(
+        chalk.yellow("ℹ️ Tunnel needs to be started for route to take effect."),
+      );
+    }
     process.exit(0);
   });

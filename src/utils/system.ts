@@ -151,3 +151,31 @@ WantedBy=multi-user.target
     process.exit(1);
   }
 }
+
+export function shouldRestartService(
+  tunnelName: string,
+  platformInfo?: PlatformInfo,
+): boolean {
+  const platform = platformInfo || detectPlatform();
+  if (platform.hasSystemctl) {
+    try {
+      execSync(`systemctl is-active tunneler-${tunnelName}`, {
+        stdio: "ignore",
+      });
+      return true;
+    } catch {
+      return false;
+    }
+  } else if (platform.isMacOS) {
+    try {
+      execSync(`launchctl list com.tunneler.${tunnelName}`, {
+        stdio: "ignore",
+      });
+
+      return true;
+    } catch {
+      return false;
+    }
+  }
+  return false;
+}
