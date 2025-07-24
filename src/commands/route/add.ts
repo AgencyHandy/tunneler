@@ -82,7 +82,7 @@ export const addRoute = new Command("add")
 
     // Restart cloudflared
     if (isServiceActive(tunnel)) {
-      await restartCloudflared(tunnel);
+      restartCloudflared(tunnel);
     } else {
       console.log(
         chalk.yellow("ℹ️ Tunnel needs to be started for route to take effect."),

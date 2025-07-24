@@ -35,7 +35,7 @@ export const restartTunnel = new Command("restart")
     }
 
     try {
-      await restartCloudflared(tunnel);
+      restartCloudflared(tunnel);
       console.log(chalk.green(`✅ Service restarted successfully.`));
     } catch (err: any) {
       console.error(

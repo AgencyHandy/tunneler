@@ -96,7 +96,7 @@ function executeServiceOperation(
   }
 }
 
-export async function restartCloudflared(tunnelName: string) {
+export function restartCloudflared(tunnelName: string) {
   const operation: ServiceOperation = {
     action: "Restarting",
     pastTense: "restarted",
@@ -112,7 +112,7 @@ export async function restartCloudflared(tunnelName: string) {
   executeServiceOperation(tunnelName, operation);
 }
 
-export async function stopCloudflared(tunnelName: string) {
+export function stopCloudflared(tunnelName: string) {
   const operation: ServiceOperation = {
     action: "Stopping",
     pastTense: "stopped",
