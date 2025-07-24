@@ -1,3 +1,10 @@
+# Unreleased
+- Refactor service management with unified platform detection
+- Add conditional service restart only when tunnel is running
+- Implement centralized service uninstall utility
+- Remove duplicate console output and code duplication
+- Improve service operation error handling
+
 # v0.3.1
 - Fix correct path for `cloudflared` during service installation for linux
 
