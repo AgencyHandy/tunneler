@@ -1,5 +1,6 @@
 import chalk from "chalk";
 import { Command } from "commander";
+import { validateCloudflared } from "../../../utils/cloudflaredValidator";
 import {
   detectPlatform,
   installAsService,
@@ -11,6 +12,8 @@ export const installService = new Command("install")
   .description("Install the tunnel as a system service")
   .requiredOption("--tunnel <name>", "Tunnel name")
   .action(async (opts) => {
+    validateCloudflared();
+
     const { tunnel } = opts;
     const platform = detectPlatform();
 

@@ -1,17 +1,20 @@
 import chalk from "chalk";
 import { execSync } from "child_process";
 import { Command } from "commander";
+import { validateCloudflared } from "../../../utils/cloudflaredValidator";
 import {
   detectPlatform,
   getServicePath,
-  isServiceInstalled,
   isServiceActive,
+  isServiceInstalled,
 } from "../../../utils/system";
 
 export const statusTunnel = new Command("status")
   .description("Check the status of a tunnel system service")
   .requiredOption("--tunnel <name>", "Tunnel name")
   .action((opts) => {
+    validateCloudflared();
+
     const { tunnel } = opts;
     const platform = detectPlatform();
 
