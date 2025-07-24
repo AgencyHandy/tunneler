@@ -9,7 +9,7 @@ export interface PlatformInfo {
   isLinux: boolean;
   hasSystemctl: boolean;
   name: string;
-  cloudflaredPath?: string;
+  cloudflaredPath?: string | undefined;
 }
 
 /**
@@ -20,9 +20,7 @@ export function detectPlatform(): PlatformInfo {
   const isWindows = platform === "win32";
   const isMacOS = platform === "darwin";
   const isLinux = platform === "linux";
-  const cloudflaredPath = execSync("which cloudflared", {
-    encoding: "utf-8",
-  }).trim();
+  let cloudflaredPath = undefined;
   let hasSystemctl = false;
 
   // Only check for systemctl on non-Windows, non-macOS systems
@@ -35,6 +33,12 @@ export function detectPlatform(): PlatformInfo {
     } catch {
       hasSystemctl = false;
     }
+  }
+
+  if (!isWindows) {
+    cloudflaredPath = execSync("which cloudflared", {
+      encoding: "utf-8",
+    }).trim();
   }
 
   return {
