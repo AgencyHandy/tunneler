@@ -1,6 +1,7 @@
 import chalk from "chalk";
 import { Command } from "commander";
 import inquirer from "inquirer";
+import { validateCloudflared } from "../../../utils/cloudflaredValidator";
 import {
   detectPlatform,
   isServiceInstalled,
@@ -12,6 +13,8 @@ export const uninstallService = new Command("uninstall")
   .requiredOption("--tunnel <name>", "Tunnel name")
   .option("--force", "Skip confirmation prompt")
   .action(async (opts) => {
+    validateCloudflared();
+
     const { tunnel, force } = opts;
     const platform = detectPlatform();
 

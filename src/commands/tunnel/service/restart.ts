@@ -1,12 +1,15 @@
 import chalk from "chalk";
 import { Command } from "commander";
-import { detectPlatform, isServiceInstalled } from "../../../utils/system";
 import { restartCloudflared } from "../../../utils/cloudflaredManager";
+import { validateCloudflared } from "../../../utils/cloudflaredValidator";
+import { detectPlatform, isServiceInstalled } from "../../../utils/system";
 
 export const restartTunnel = new Command("restart")
   .description("Restart the tunnel system service")
   .requiredOption("--tunnel <name>", "Tunnel name")
   .action(async (opts) => {
+    validateCloudflared();
+
     const { tunnel } = opts;
     const platform = detectPlatform();
 
