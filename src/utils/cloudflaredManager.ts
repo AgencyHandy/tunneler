@@ -63,9 +63,7 @@ function executeServiceOperation(
       process.exit(1);
     }
     return;
-  }
-
-  if (platform.isMacOS) {
+  } else if (platform.isMacOS) {
     const plistPath = getServicePath(tunnelName, platform);
     console.log(chalk.gray(`Detected macOS, ${operation.macOSMessage}...`));
 
@@ -88,6 +86,13 @@ function executeServiceOperation(
       process.exit(1);
     }
     return;
+  } else {
+    console.error(
+      chalk.red(
+        `Service operation not supported on platform "${platform.name || platform}".`,
+      ),
+    );
+    process.exit(1);
   }
 }
 
