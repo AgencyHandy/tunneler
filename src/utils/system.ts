@@ -194,7 +194,7 @@ export async function uninstallService(tunnel: string) {
   }
 }
 
-export function shouldRestartService(
+export function isServiceActive(
   tunnelName: string,
   platformInfo?: PlatformInfo,
 ): boolean {

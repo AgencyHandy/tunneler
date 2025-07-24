@@ -5,7 +5,7 @@ import {
   detectPlatform,
   getServicePath,
   isServiceInstalled,
-  shouldRestartService,
+  isServiceActive,
 } from "../../../utils/system";
 
 export const statusTunnel = new Command("status")
@@ -36,7 +36,7 @@ export const statusTunnel = new Command("status")
     console.log(chalk.green(`✅ Service installed at:`), servicePath);
 
     if (platform.hasSystemctl) {
-      let isActive = shouldRestartService(tunnel, platform);
+      let isActive = isServiceActive(tunnel, platform);
       let pid = "N/A";
 
       try {
