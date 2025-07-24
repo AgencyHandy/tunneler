@@ -1,6 +1,11 @@
 import chalk from "chalk";
 import { execSync } from "child_process";
-import { detectPlatform, getServicePath, isServiceInstalled } from "./system";
+import {
+  detectPlatform,
+  getServicePath,
+  isServiceInstalled,
+  PlatformInfo,
+} from "./system";
 
 interface ServiceOperation {
   action: string;
@@ -11,7 +16,10 @@ interface ServiceOperation {
   macOSCommands: (plistPath: string) => string[];
 }
 
-function validateServiceInstalled(tunnelName: string, platform: any): void {
+function validateServiceInstalled(
+  tunnelName: string,
+  platform: PlatformInfo,
+): void {
   if (!isServiceInstalled(tunnelName, platform)) {
     const runnerType = platform.hasSystemctl
       ? "systemd service"
