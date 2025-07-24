@@ -35,10 +35,12 @@ export function detectPlatform(): PlatformInfo {
     }
   }
 
-  if (!isWindows) {
+  try {
     cloudflaredPath = execSync("which cloudflared", {
       encoding: "utf-8",
     }).trim();
+  } catch (error) {
+    // Simply ignore if cloudflared is not found
   }
 
   return {
