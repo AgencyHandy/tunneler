@@ -1,3 +1,6 @@
+# v0.4.1
+- Add release to npm publish workflow
+
 # v0.4.0
 - Refactor service management with unified platform detection
 - Add conditional service restart only when tunnel is running
