@@ -1,4 +1,4 @@
-# Unreleased
+# v0.4.0
 - Refactor service management with unified platform detection
 - Add conditional service restart only when tunnel is running
 - Implement centralized service uninstall utility
