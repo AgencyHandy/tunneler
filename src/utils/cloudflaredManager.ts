@@ -47,7 +47,7 @@ function executeServiceOperation(
 
     try {
       execSync(`${operation.systemdCommand} tunneler-${tunnelName}`, {
-        stdio: "inherit",
+        stdio: "ignore",
       });
       console.log(
         chalk.green(
@@ -70,7 +70,7 @@ function executeServiceOperation(
     try {
       const commands = operation.macOSCommands(plistPath);
       commands.forEach((command) => {
-        execSync(command, { stdio: "inherit" });
+        execSync(command, { stdio: "ignore" });
       });
       console.log(
         chalk.green(
