@@ -58,7 +58,7 @@ export const removeRoute = new Command("remove")
 
     // Restart cloudflared
     if (isServiceActive(tunnel)) {
-      await restartCloudflared(tunnel);
+      restartCloudflared(tunnel);
     }
     process.exit(0);
   });
