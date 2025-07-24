@@ -110,14 +110,6 @@ export async function restartCloudflared(tunnelName: string) {
   };
 
   executeServiceOperation(tunnelName, operation);
-
-  /**
-   * If no managed service is detected,
-   * we'll not restart cloudflared automatically.
-   *
-   * This is because cloudflared can be run in many ways,
-   * and we don't want to assume how the user has it set up.
-   */
 }
 
 export async function stopCloudflared(tunnelName: string) {
