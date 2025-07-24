@@ -1,10 +1,10 @@
 import chalk from "chalk";
-import { execSync } from "child_process";
 import { Command } from "commander";
-import fs from "fs";
-import os from "os";
-import path from "path";
-import { installAsService } from "../../../utils/system";
+import {
+  detectPlatform,
+  installAsService,
+  isServiceInstalled,
+} from "../../../utils/system";
 import { getTunnelInfo } from "../../../utils/tunnelConfig";
 
 export const installService = new Command("install")
@@ -12,9 +12,9 @@ export const installService = new Command("install")
   .requiredOption("--tunnel <name>", "Tunnel name")
   .action(async (opts) => {
     const { tunnel } = opts;
-    const platform = os.platform();
+    const platform = detectPlatform();
 
-    if (platform === "win32") {
+    if (platform.isWindows) {
       console.error(
         chalk.red("Installing as a service is not supported on Windows."),
       );
@@ -30,42 +30,19 @@ export const installService = new Command("install")
     }
 
     // Check if service already exists
-    if (platform === "linux") {
-      const servicePath = `/etc/systemd/system/tunneler-${tunnel}.service`;
-      if (fs.existsSync(servicePath)) {
-        console.error(
-          chalk.red(
-            `Service already exists. Uninstall it first if you want to replace it.`,
-          ),
-        );
-        process.exit(1);
-      }
-    } else if (platform === "darwin") {
-      const plistPath = path.join(
-        os.homedir(),
-        "Library/LaunchAgents",
-        `com.tunneler.${tunnel}.plist`,
+    if (isServiceInstalled(tunnel, platform)) {
+      console.error(
+        chalk.red(
+          `Service already exists. Uninstall it first if you want to replace it.`,
+        ),
       );
-      if (fs.existsSync(plistPath)) {
-        console.error(
-          chalk.red(
-            `Service already exists. Uninstall it first if you want to replace it.`,
-          ),
-        );
-        process.exit(1);
-      }
+      process.exit(1);
     }
 
     console.log(chalk.green(`✅ Installing system service...`));
     await installAsService(tunnel, tunnelInfo.configPath);
 
-    if (platform === "linux") {
-      execSync(`systemctl enable tunneler-${tunnel}`);
-      console.log(chalk.green(`✅ Service installed and enabled.`));
-    } else {
-      console.log(chalk.green(`✅ Service installed.`));
-    }
-
+    console.log(chalk.green(`✅ Service installed and enabled.`));
     console.log(chalk.yellow(`You can start it with:`));
     console.log(`  tunneler tunnel service start --tunnel ${tunnel}`);
   });

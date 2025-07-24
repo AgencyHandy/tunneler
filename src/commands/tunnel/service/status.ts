@@ -1,18 +1,21 @@
 import chalk from "chalk";
 import { execSync } from "child_process";
 import { Command } from "commander";
-import fs from "fs";
-import os from "os";
-import path from "path";
+import {
+  detectPlatform,
+  getServicePath,
+  isServiceInstalled,
+  shouldRestartService,
+} from "../../../utils/system";
 
 export const statusTunnel = new Command("status")
   .description("Check the status of a tunnel system service")
   .requiredOption("--tunnel <name>", "Tunnel name")
   .action((opts) => {
     const { tunnel } = opts;
-    const platform = os.platform();
+    const platform = detectPlatform();
 
-    if (platform === "win32") {
+    if (platform.isWindows) {
       console.log(
         chalk.yellow("Service management is not supported on Windows."),
       );
@@ -24,25 +27,17 @@ export const statusTunnel = new Command("status")
       return;
     }
 
-    if (platform === "linux") {
-      const servicePath = `/etc/systemd/system/tunneler-${tunnel}.service`;
-      if (!fs.existsSync(servicePath)) {
-        console.log(chalk.red(`❌ Service not installed.`));
-        return;
-      }
+    if (!isServiceInstalled(tunnel, platform)) {
+      console.log(chalk.red(`❌ Service not installed.`));
+      return;
+    }
 
-      console.log(chalk.green(`✅ Service installed at:`), servicePath);
+    const servicePath = getServicePath(tunnel, platform);
+    console.log(chalk.green(`✅ Service installed at:`), servicePath);
 
-      let isActive = "inactive";
+    if (platform.hasSystemctl) {
+      let isActive = shouldRestartService(tunnel, platform);
       let pid = "N/A";
-
-      try {
-        isActive = execSync(`systemctl is-active tunneler-${tunnel}`, {
-          encoding: "utf-8",
-        }).trim();
-      } catch {
-        // inactive/stopped
-      }
 
       try {
         const pidOutput = execSync(
@@ -54,25 +49,13 @@ export const statusTunnel = new Command("status")
         // ignore
       }
 
-      if (isActive === "active") {
+      if (isActive) {
         console.log(chalk.green(`✅ Service is active (running)`));
         console.log(chalk.green(`✅ PID:`), pid);
       } else {
         console.log(chalk.yellow(`❌ Service is inactive (stopped)`));
       }
-    } else if (platform === "darwin") {
-      const plistPath = path.join(
-        os.homedir(),
-        "Library/LaunchAgents",
-        `com.tunneler.${tunnel}.plist`,
-      );
-      if (!fs.existsSync(plistPath)) {
-        console.log(chalk.red(`❌ Service not installed.`));
-        return;
-      }
-
-      console.log(chalk.green(`✅ Service installed at:`), plistPath);
-
+    } else if (platform.isMacOS) {
       let loaded = false;
       let pid = "N/A";
 
@@ -105,6 +88,6 @@ export const statusTunnel = new Command("status")
         console.log(chalk.yellow(`❌ Service is not loaded (stopped)`));
       }
     } else {
-      console.log(chalk.red(`❌ Unsupported platform: ${platform}`));
+      console.log(chalk.red(`❌ Unsupported platform: ${platform.name}`));
     }
   });
