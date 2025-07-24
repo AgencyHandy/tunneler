@@ -4,6 +4,11 @@
 - Implement centralized service uninstall utility
 - Remove duplicate console output and code duplication
 - Improve service operation error handling
+- Add tunnel restart command for service management
+- Refactor all service commands to use system utilities
+- Improve cloudflared path detection with better error handling
+- Add better platform type definitions and validation
+- Enhance LaunchAgent error handling for macOS operations
 
 # v0.3.1
 - Fix correct path for `cloudflared` during service installation for linux
