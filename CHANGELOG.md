@@ -1,9 +1,3 @@
-# v0.4.2
-- Fresh install dependencies instead of npm ci in publish workflow
-
-# v0.4.1
-- Add release to npm publish workflow
-
 # v0.4.0
 - Refactor service management with unified platform detection
 - Add conditional service restart only when tunnel is running
